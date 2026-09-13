@@ -57,7 +57,7 @@ a{color:inherit;}
 }
 
 /* body content */
-.lp-content{padding:44px 0 20px;max-width:760px;margin:0 auto;}
+.lp-content{padding:44px 24px 20px;max-width:760px;margin:0 auto;}
 .lp-content h2{font-size:22px;margin:34px 0 12px;}
 .lp-content h2:first-child{margin-top:0;}
 .lp-content p{font-size:15.5px;color:#1A2733;margin:0 0 14px;}
