@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://finpromatch.vercel.app/sitemap.xml

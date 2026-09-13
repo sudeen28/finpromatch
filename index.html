@@ -114,7 +114,8 @@
 
   /* hero entrance */
   @keyframes heroIn{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
-  .hero h1{animation:heroIn .8s cubic-bezier(.16,1,.3,1) both;}
+  .hero-seo-h1{animation:heroIn .8s cubic-bezier(.16,1,.3,1) both;}
+  .hero-subhead{animation:heroIn .8s cubic-bezier(.16,1,.3,1) .08s both;}
   .hero .lede{animation:heroIn .8s cubic-bezier(.16,1,.3,1) .15s both;}
   .hero-ctas{animation:heroIn .8s cubic-bezier(.16,1,.3,1) .28s both;}
   .tape-field{opacity:0;animation:heroIn .7s cubic-bezier(.16,1,.3,1) .4s forwards;}
@@ -232,14 +233,17 @@
 
   /* HERO */
   .hero{padding-top:32px;padding-bottom:56px;text-align:center;}
-  .hero h1{font-size:64px;max-width:880px;margin:0 auto;line-height:1.15;contain:layout style;}
-  .hero h1 .hero-line{display:block;}
-  .hero h1 .rot-wrap{
-    display:block;position:relative;color:var(--orange);
-    white-space:nowrap;margin:4px 0;
-    contain:layout style;
+  .hero-seo-h1{font-size:44px;max-width:760px;margin:0 auto;line-height:1.18;contain:layout style;}
+  .hero-subhead{
+    font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;color:var(--ink-soft);
+    font-size:26px;max-width:700px;margin:10px auto 0;line-height:1.2;contain:layout style;
   }
-  .hero h1 .rot-cursor{
+  .hero-subhead .hero-line{display:inline;}
+  .hero-subhead .rot-wrap{
+    display:inline-block;position:relative;color:var(--orange);
+    white-space:nowrap;contain:layout style;
+  }
+  .hero-subhead .rot-cursor{
     display:inline-block;width:3px;height:0.85em;margin-left:3px;background:var(--orange);
     animation:cursorBlink .8s steps(1) infinite;vertical-align:-0.08em;
   }
@@ -343,6 +347,7 @@
 
   /* problem section — fades in fully within one normal scroll, no scroll-jacking */
   /* broken-timeline "problem" section */
+  .problem-seo-subline{max-width:560px;margin:14px auto 0;text-align:center;font-size:15.5px;color:rgba(255,255,255,.72);line-height:1.5;}
   .bt-wrap{max-width:480px;margin:52px auto 0;display:flex;flex-direction:column;align-items:center;}
   .bt-step{width:100%;}
   .bt-card{
@@ -466,6 +471,8 @@
   .biz-card:hover .biz-card-icon{transform:scale(1.12) rotate(-4deg);}
   .biz-card-body{padding:20px;}
   .biz-card-body h4{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:16px;}
+  .biz-card-link{color:inherit;text-decoration:none;}
+  .biz-card-link:hover{text-decoration:underline;color:var(--orange-dark);}
   .biz-card-body p{margin:6px 0 0;font-size:13.5px;color:var(--ink-soft);}
 
   .fb-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:44px;text-align:left;}
@@ -508,7 +515,7 @@
   .footer-top .brand-name{color:#fff;}
   .footer-top .brand-tagline{color:rgba(255,255,255,.55);display:block;}
 
-  @media(max-width:720px){.hero h1{font-size:36px;}.band h2{font-size:28px;}.hero .lede{font-size:15.5px;}}
+  @media(max-width:720px){.hero-seo-h1{font-size:28px;}.hero-subhead{font-size:19px;}.band h2{font-size:28px;}.hero .lede{font-size:15.5px;}}
 
   /* ===== shared app-view styles (portal / admin / forms) ===== */
   .section-label{
@@ -830,6 +837,102 @@
   .notif-empty{text-align:center;padding:64px 20px;color:var(--ink-soft);}
 </style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How does FinProMatch work?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Tell us what you're dealing with: the type of work, your industry, location, and how sensitive it is. Our team reviews the request personally and identifies which specialist firm is the right fit, then makes the introduction. There's also a separate, lighter-weight option to work with an individual professional directly for smaller, simpler work."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What's the difference between getting matched with a firm and finding an individual professional?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Firm matching is for engagements where specialisation, location, and capacity genuinely matter: tax investigations, forensic accounting, audits, asset tracing, restructuring and similar work. The individual professional track is a lighter option for smaller, routine work (like a single filing), and includes an optional contract-and-payment process through FinProMatch. Both are manually reviewed by our team; use whichever fits what you need."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How are professionals and firms verified?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "We check identity, professional body registration (ICAN, ANAN, CITN, or equivalent), and relevant experience, for individual professionals and firms alike. It's a manual review by our team, and for firms we track it at a granular level (identity, credentials, and even specific specialisations) rather than one blanket approval."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I choose an individual professional?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "After you submit a request on the individual-professional track, we send you two to three matched professionals with their experience and specialisations. You pick the one that fits and we set up the contract. Firm matching works differently: FinProMatch's team makes the introduction rather than presenting you with a list to choose from."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How does payment protection work?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "This applies to the individual-professional track: you pay FinProMatch, not the professional directly, and that payment is held until the work is marked delivered, then released minus our commission. It's not a regulated escrow service. It's a payment process designed to reduce the risk of paying upfront with no recourse. Firm engagements are currently introduction-only; FinProMatch doesn't yet process payment between you and the firm."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What happens if I'm unhappy with the work?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Tell us and we'll re-match you at no extra cost, whether that was a firm or an individual professional. We're also building a more structured dispute process as the platform grows."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What services can I request?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Everything from routine bookkeeping, tax filing (PAYE, VAT, CIT), and payroll setup, through to tax investigations and disputes, forensic accounting, fraud investigation, asset tracing, litigation support, audits, and due diligence. If your need doesn't fit neatly into one of those, tell us anyway and we'll find the right fit."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can businesses use FinProMatch, not just individuals?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, most requests come from small and growing businesses that need ongoing tax and accounting support, not a one-off filing."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do professionals or firms join?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Individual professionals apply through the professional portal with their registration number, expertise, and experience. Accounting and advisory firms register through 'List My Firm' instead, with details for the whole practice. Both are manually reviewed before you start receiving matched requests."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "When do I pay?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Only on the individual-professional track, and only after you've chosen a matched professional and signed the one-page contract. Nothing is charged before that. Firm engagements don't currently have a payment step through FinProMatch."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How does FinProMatch make money?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "We take a commission on individual-professional engagements, and on renewals or repeat work for a period after the introduction."
+      }
+    }
+  ]
+}
+</script>
 </head>
 <body>
 
@@ -903,11 +1006,12 @@
     <div class="reveal" style="margin-bottom:18px;">
       <span class="eyebrow-pill">Verified specialists. Perfectly matched.</span>
     </div>
-    <h1>
+    <h1 class="hero-seo-h1">Find the Right Accounting, Tax, Audit or Forensic Firm in Nigeria</h1>
+    <p class="hero-subhead">
       <span class="hero-line">The right</span>
       <span class="rot-wrap" id="rot-wrap"><span id="rot-text"></span><span class="rot-cursor" id="rot-cursor"></span></span>
       <span class="hero-line">for the job.</span>
-    </h1>
+    </p>
     <p class="lede">Tell us what you're dealing with. Our team personally reviews your request and matches you with a verified specialist firm, based on the nature of the work, location, and how sensitive it is. No algorithm, no match score; a person makes the call.</p>
     <div class="hero-ctas">
       <button class="btn btn-orange" onclick="go('client')">Get Matched →</button>
@@ -931,6 +1035,7 @@
         <span class="eyebrow-pill">The problem</span>
       </div>
       <h2 class="reveal" style="text-align:center;">Finding anyone is easy. Finding someone you can trust is the hard part.</h2>
+      <p class="reveal problem-seo-subline">Stop searching accounting directories in Nigeria. Get matched to a vetted specialist firm instead.</p>
 
       <div class="bt-wrap reveal-stagger" id="break-timeline">
 
@@ -1175,7 +1280,7 @@
               <path d="M20 20h6M20 26h6M38 20h6M38 26h6"/>
             </svg>
           </div>
-          <div class="biz-card-body"><h4>Need monthly bookkeeping?</h4><p>→ Bookkeeping specialist</p></div>
+          <div class="biz-card-body"><h4><a href="/bookkeeping-services-lagos" class="biz-card-link">Need monthly bookkeeping?</a></h4><p>→ Bookkeeping specialist</p></div>
         </div>
         <div class="biz-card stagger-child">
           <div class="biz-card-icon">
@@ -1187,7 +1292,7 @@
               <path d="M43.5 46l1.8 1.8L48.5 44" stroke="#fff" stroke-width="2"/>
             </svg>
           </div>
-          <div class="biz-card-body"><h4>Facing a tax investigation?</h4><p>→ Tax investigation specialist</p></div>
+          <div class="biz-card-body"><h4><a href="/tax-investigation-firms-nigeria" class="biz-card-link">Facing a FIRS tax investigation or tax audit?</a></h4><p>→ Tax investigation specialist</p></div>
         </div>
         <div class="biz-card stagger-child">
           <div class="biz-card-icon">
@@ -1197,7 +1302,7 @@
               <circle cx="27" cy="27" r="5" fill="var(--orange)" stroke="none"/>
             </svg>
           </div>
-          <div class="biz-card-body"><h4>Suspect financial fraud?</h4><p>→ Forensic accounting specialist</p></div>
+          <div class="biz-card-body"><h4><a href="/forensic-accounting-nigeria" class="biz-card-link">Need a forensic accountant to investigate fraud?</a></h4><p>→ Forensic accounting specialist</p></div>
         </div>
         <div class="biz-card stagger-child">
           <div class="biz-card-icon">
@@ -1206,7 +1311,7 @@
               <circle cx="32" cy="23" r="4.5" fill="var(--orange)" stroke="none"/>
             </svg>
           </div>
-          <div class="biz-card-body"><h4>Need to trace hidden assets?</h4><p>→ Asset tracing / financial investigation specialist</p></div>
+          <div class="biz-card-body"><h4><a href="/asset-tracing-nigeria" class="biz-card-link">Need asset tracing or financial investigation services?</a></h4><p>→ Asset tracing / financial investigation specialist</p></div>
         </div>
         <div class="biz-card stagger-child">
           <div class="biz-card-icon">
@@ -1218,7 +1323,7 @@
               <rect x="23" y="49" width="18" height="5" fill="var(--orange)" stroke="none"/>
             </svg>
           </div>
-          <div class="biz-card-body"><h4>Preparing for litigation?</h4><p>→ Litigation-support specialist</p></div>
+          <div class="biz-card-body"><h4><a href="/litigation-support-nigeria" class="biz-card-link">Need litigation support or an expert witness for a financial dispute?</a></h4><p>→ Litigation-support specialist</p></div>
         </div>
         <div class="biz-card stagger-child">
           <div class="biz-card-icon">
@@ -1228,7 +1333,7 @@
               <rect x="26" y="46" width="12" height="8" fill="var(--orange)" stroke="none"/>
             </svg>
           </div>
-          <div class="biz-card-body"><h4>Need a large corporate audit?</h4><p>→ Audit firm with the right capacity</p></div>
+          <div class="biz-card-body"><h4><a href="/audit-firms-lagos" class="biz-card-link">Need an audit firm in Nigeria with statutory audit experience?</a></h4><p>→ Audit firm with the right capacity</p></div>
         </div>
       </div>
       <div style="text-align:center;margin-top:32px;" class="reveal">
@@ -1245,7 +1350,7 @@
       <h2 class="reveal">Local when it matters. Remote when it doesn't.</h2>
       <p class="band-sub reveal">For engagements that need someone on the ground, we prioritize firms based in or near your location. For work that can be handled remotely, geography matters a lot less, and that's factored into which firms we suggest.</p>
       <div class="fb-grid reveal-stagger">
-        <div class="fb-item dark stagger-child"><strong>On-site work</strong><span>Investigations, audits with physical records, and matters requiring an in-person presence get matched to firms who can actually show up, starting with firms in your city or state.</span></div>
+        <div class="fb-item dark stagger-child"><strong>On-site work</strong><span>Investigations, audits with physical records, and matters requiring an in-person presence get matched to firms who can actually show up, starting with firms in Lagos, Abuja, and Port Harcourt.</span></div>
         <div class="fb-item dark stagger-child"><strong>Remote-friendly work</strong><span>Bookkeeping, filings, and advisory that don't need anyone on-site open up to well-suited firms further afield, so you're not limited to who happens to be local.</span></div>
       </div>
     </div>
@@ -1278,7 +1383,96 @@
         <span class="eyebrow-pill">Frequently asked questions</span>
       </div>
       <h2 class="reveal">A few questions you might have.</h2>
-      <div class="faq-list reveal-stagger" id="faq-list"></div>
+      <div class="faq-list reveal-stagger" id="faq-list">
+      <div class="faq-item" data-i="0" onclick="toggleFaq(0)">
+        <div class="faq-q">
+          <span class="faq-index">01</span>
+          <span class="faq-q-text">How does FinProMatch work?</span>
+          <span class="plus">+</span>
+        </div>
+        <div class="faq-a-wrap"><div class="faq-a">Tell us what you're dealing with: the type of work, your industry, location, and how sensitive it is. Our team reviews the request personally and identifies which specialist firm is the right fit, then makes the introduction. There's also a separate, lighter-weight option to work with an individual professional directly for smaller, simpler work.</div></div>
+      </div>
+      <div class="faq-item" data-i="1" onclick="toggleFaq(1)">
+        <div class="faq-q">
+          <span class="faq-index">02</span>
+          <span class="faq-q-text">What's the difference between getting matched with a firm and finding an individual professional?</span>
+          <span class="plus">+</span>
+        </div>
+        <div class="faq-a-wrap"><div class="faq-a">Firm matching is for engagements where specialisation, location, and capacity genuinely matter: tax investigations, forensic accounting, audits, asset tracing, restructuring and similar work. The individual professional track is a lighter option for smaller, routine work (like a single filing), and includes an optional contract-and-payment process through FinProMatch. Both are manually reviewed by our team; use whichever fits what you need.</div></div>
+      </div>
+      <div class="faq-item" data-i="2" onclick="toggleFaq(2)">
+        <div class="faq-q">
+          <span class="faq-index">03</span>
+          <span class="faq-q-text">How are professionals and firms verified?</span>
+          <span class="plus">+</span>
+        </div>
+        <div class="faq-a-wrap"><div class="faq-a">We check identity, professional body registration (ICAN, ANAN, CITN, or equivalent), and relevant experience, for individual professionals and firms alike. It's a manual review by our team, and for firms we track it at a granular level (identity, credentials, and even specific specialisations) rather than one blanket approval.</div></div>
+      </div>
+      <div class="faq-item" data-i="3" onclick="toggleFaq(3)">
+        <div class="faq-q">
+          <span class="faq-index">04</span>
+          <span class="faq-q-text">How do I choose an individual professional?</span>
+          <span class="plus">+</span>
+        </div>
+        <div class="faq-a-wrap"><div class="faq-a">After you submit a request on the individual-professional track, we send you two to three matched professionals with their experience and specialisations. You pick the one that fits and we set up the contract. Firm matching works differently: FinProMatch's team makes the introduction rather than presenting you with a list to choose from.</div></div>
+      </div>
+      <div class="faq-item" data-i="4" onclick="toggleFaq(4)">
+        <div class="faq-q">
+          <span class="faq-index">05</span>
+          <span class="faq-q-text">How does payment protection work?</span>
+          <span class="plus">+</span>
+        </div>
+        <div class="faq-a-wrap"><div class="faq-a">This applies to the individual-professional track: you pay FinProMatch, not the professional directly, and that payment is held until the work is marked delivered, then released minus our commission. It's not a regulated escrow service. It's a payment process designed to reduce the risk of paying upfront with no recourse. Firm engagements are currently introduction-only; FinProMatch doesn't yet process payment between you and the firm.</div></div>
+      </div>
+      <div class="faq-item" data-i="5" onclick="toggleFaq(5)">
+        <div class="faq-q">
+          <span class="faq-index">06</span>
+          <span class="faq-q-text">What happens if I'm unhappy with the work?</span>
+          <span class="plus">+</span>
+        </div>
+        <div class="faq-a-wrap"><div class="faq-a">Tell us and we'll re-match you at no extra cost, whether that was a firm or an individual professional. We're also building a more structured dispute process as the platform grows.</div></div>
+      </div>
+      <div class="faq-item" data-i="6" onclick="toggleFaq(6)">
+        <div class="faq-q">
+          <span class="faq-index">07</span>
+          <span class="faq-q-text">What services can I request?</span>
+          <span class="plus">+</span>
+        </div>
+        <div class="faq-a-wrap"><div class="faq-a">Everything from routine bookkeeping, tax filing (PAYE, VAT, CIT), and payroll setup, through to tax investigations and disputes, forensic accounting, fraud investigation, asset tracing, litigation support, audits, and due diligence. If your need doesn't fit neatly into one of those, tell us anyway and we'll find the right fit.</div></div>
+      </div>
+      <div class="faq-item" data-i="7" onclick="toggleFaq(7)">
+        <div class="faq-q">
+          <span class="faq-index">08</span>
+          <span class="faq-q-text">Can businesses use FinProMatch, not just individuals?</span>
+          <span class="plus">+</span>
+        </div>
+        <div class="faq-a-wrap"><div class="faq-a">Yes, most requests come from small and growing businesses that need ongoing tax and accounting support, not a one-off filing.</div></div>
+      </div>
+      <div class="faq-item" data-i="8" onclick="toggleFaq(8)">
+        <div class="faq-q">
+          <span class="faq-index">09</span>
+          <span class="faq-q-text">How do professionals or firms join?</span>
+          <span class="plus">+</span>
+        </div>
+        <div class="faq-a-wrap"><div class="faq-a">Individual professionals apply through the professional portal with their registration number, expertise, and experience. Accounting and advisory firms register through 'List My Firm' instead, with details for the whole practice. Both are manually reviewed before you start receiving matched requests.</div></div>
+      </div>
+      <div class="faq-item" data-i="9" onclick="toggleFaq(9)">
+        <div class="faq-q">
+          <span class="faq-index">10</span>
+          <span class="faq-q-text">When do I pay?</span>
+          <span class="plus">+</span>
+        </div>
+        <div class="faq-a-wrap"><div class="faq-a">Only on the individual-professional track, and only after you've chosen a matched professional and signed the one-page contract. Nothing is charged before that. Firm engagements don't currently have a payment step through FinProMatch.</div></div>
+      </div>
+      <div class="faq-item" data-i="10" onclick="toggleFaq(10)">
+        <div class="faq-q">
+          <span class="faq-index">11</span>
+          <span class="faq-q-text">How does FinProMatch make money?</span>
+          <span class="plus">+</span>
+        </div>
+        <div class="faq-a-wrap"><div class="faq-a">We take a commission on individual-professional engagements, and on renewals or repeat work for a period after the introduction.</div></div>
+      </div>
+      </div>
     </div>
   </div>
 
@@ -1295,7 +1489,7 @@
       <div id="about" class="stub-block reveal">
         <div class="section-label">About</div>
         <h3 class="stub-h3">About FinProMatch</h3>
-        <p class="stub-p">FinProMatch is a managed marketplace that matches Nigerian businesses and individuals with the right accounting, tax, audit, forensic and financial specialist firm for their specific engagement, not just any accountant. Instead of leaving you to find and vet someone on your own, FinProMatch reviews requests, identifies the right specialist firm, and manages the introduction.</p>
+        <p class="stub-p">FinProMatch connects Nigerian businesses with vetted accounting, tax, forensic, audit and financial advisory firms across Lagos, Abuja and Port Harcourt.</p>
       </div>
       <div id="contact" class="stub-block reveal">
         <div class="section-label">Contact</div>
@@ -1542,32 +1736,6 @@ function initSteps(){
 }
 
 /* FAQ */
-const faqData = [
-  {q:"How does FinProMatch work?", a:"Tell us what you're dealing with: the type of work, your industry, location, and how sensitive it is. Our team reviews the request personally and identifies which specialist firm is the right fit, then makes the introduction. There's also a separate, lighter-weight option to work with an individual professional directly for smaller, simpler work."},
-  {q:"What's the difference between getting matched with a firm and finding an individual professional?", a:"Firm matching is for engagements where specialisation, location, and capacity genuinely matter: tax investigations, forensic accounting, audits, asset tracing, restructuring and similar work. The individual professional track is a lighter option for smaller, routine work (like a single filing), and includes an optional contract-and-payment process through FinProMatch. Both are manually reviewed by our team; use whichever fits what you need."},
-  {q:"How are professionals and firms verified?", a:"We check identity, professional body registration (ICAN, ANAN, CITN, or equivalent), and relevant experience, for individual professionals and firms alike. It's a manual review by our team, and for firms we track it at a granular level (identity, credentials, and even specific specialisations) rather than one blanket approval."},
-  {q:"How do I choose an individual professional?", a:"After you submit a request on the individual-professional track, we send you two to three matched professionals with their experience and specialisations. You pick the one that fits and we set up the contract. Firm matching works differently: FinProMatch's team makes the introduction rather than presenting you with a list to choose from."},
-  {q:"How does payment protection work?", a:"This applies to the individual-professional track: you pay FinProMatch, not the professional directly, and that payment is held until the work is marked delivered, then released minus our commission. It's not a regulated escrow service. It's a payment process designed to reduce the risk of paying upfront with no recourse. Firm engagements are currently introduction-only; FinProMatch doesn't yet process payment between you and the firm."},
-  {q:"What happens if I'm unhappy with the work?", a:"Tell us and we'll re-match you at no extra cost, whether that was a firm or an individual professional. We're also building a more structured dispute process as the platform grows."},
-  {q:"What services can I request?", a:"Everything from routine bookkeeping, tax filing (PAYE, VAT, CIT), and payroll setup, through to tax investigations and disputes, forensic accounting, fraud investigation, asset tracing, litigation support, audits, and due diligence. If your need doesn't fit neatly into one of those, tell us anyway and we'll find the right fit."},
-  {q:"Can businesses use FinProMatch, not just individuals?", a:"Yes, most requests come from small and growing businesses that need ongoing tax and accounting support, not a one-off filing."},
-  {q:"How do professionals or firms join?", a:"Individual professionals apply through the professional portal with their registration number, expertise, and experience. Accounting and advisory firms register through 'List My Firm' instead, with details for the whole practice. Both are manually reviewed before you start receiving matched requests."},
-  {q:"When do I pay?", a:"Only on the individual-professional track, and only after you've chosen a matched professional and signed the one-page contract. Nothing is charged before that. Firm engagements don't currently have a payment step through FinProMatch."},
-  {q:"How does FinProMatch make money?", a:"We take a commission on individual-professional engagements, and on renewals or repeat work for a period after the introduction."}
-];
-function initFaq(){
-  const list = document.getElementById('faq-list');
-  if(!list) return;
-  list.innerHTML = faqData.map((f, i) => `
-    <div class="faq-item" data-i="${i}" onclick="toggleFaq(${i})">
-      <div class="faq-q">
-        <span class="faq-index">${String(i+1).padStart(2,'0')}</span>
-        <span class="faq-q-text">${f.q}</span>
-        <span class="plus">+</span>
-      </div>
-      <div class="faq-a-wrap"><div class="faq-a">${f.a}</div></div>
-    </div>`).join('');
-}
 function toggleFaq(i){
   const item = document.querySelector(`.faq-item[data-i="${i}"]`);
   if(!item) return;
@@ -1635,7 +1803,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initTapeField();
   initPhoneMock();
   initSteps();
-  initFaq();
   initRevealObserver();
   initScrollTop();
   if(window.location.hash === '#admin'){ go('admin'); }
