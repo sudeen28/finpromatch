@@ -115,7 +115,6 @@
   /* hero entrance */
   @keyframes heroIn{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
   .hero-seo-h1{animation:heroIn .8s cubic-bezier(.16,1,.3,1) both;}
-  .hero-subhead{animation:heroIn .8s cubic-bezier(.16,1,.3,1) .08s both;}
   .hero .lede{animation:heroIn .8s cubic-bezier(.16,1,.3,1) .15s both;}
   .hero-ctas{animation:heroIn .8s cubic-bezier(.16,1,.3,1) .28s both;}
   .tape-field{opacity:0;animation:heroIn .7s cubic-bezier(.16,1,.3,1) .4s forwards;}
@@ -233,17 +232,18 @@
 
   /* HERO */
   .hero{padding-top:32px;padding-bottom:56px;text-align:center;}
-  .hero-seo-h1{font-size:44px;max-width:760px;margin:0 auto;line-height:1.18;contain:layout style;}
-  .hero-subhead{
-    font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;color:var(--ink-soft);
-    font-size:26px;max-width:700px;margin:10px auto 0;line-height:1.2;contain:layout style;
+  .hero-seo-h1{font-size:44px;max-width:820px;margin:0 auto;line-height:1.2;contain:layout style;}
+  .hero-seo-h1 .hero-line{display:block;}
+  .hero-seo-h1 .rot-line{
+    display:flex;align-items:center;justify-content:center;
+    min-height:58px;contain:layout style;
   }
-  .hero-subhead .hero-line{display:inline;}
-  .hero-subhead .rot-wrap{
+  .hero-seo-h1 .rot-wrap{
     display:inline-block;position:relative;color:var(--orange);
-    white-space:nowrap;contain:layout style;
+    white-space:normal;text-align:center;line-height:1.2;
+    contain:layout style;
   }
-  .hero-subhead .rot-cursor{
+  .hero-seo-h1 .rot-cursor{
     display:inline-block;width:3px;height:0.85em;margin-left:3px;background:var(--orange);
     animation:cursorBlink .8s steps(1) infinite;vertical-align:-0.08em;
   }
@@ -344,58 +344,6 @@
   .band h2{font-size:38px;text-align:center;max-width:760px;margin:0 auto;}
   .band .band-sub{text-align:center;color:var(--ink-soft);max-width:520px;margin:16px auto 0;font-size:16px;}
   .band.dark .band-sub{color:rgba(255,255,255,.75);}
-
-  /* problem section — fades in fully within one normal scroll, no scroll-jacking */
-  /* broken-timeline "problem" section */
-  .problem-seo-subline{max-width:560px;margin:14px auto 0;text-align:center;font-size:15.5px;color:rgba(255,255,255,.72);line-height:1.5;}
-  .bt-wrap{max-width:480px;margin:52px auto 0;display:flex;flex-direction:column;align-items:center;}
-  .bt-step{width:100%;}
-  .bt-card{
-    background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.14);border-left:3px solid var(--green);
-    border-radius:12px;padding:18px 22px;text-align:left;
-  }
-  .bt-card-label{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:#fff;margin-bottom:6px;}
-  .bt-card-text{font-size:15px;color:rgba(255,255,255,.65);}
-  .bt-step:nth-child(5) .bt-card{border-left-color:var(--amber);}
-  .bt-step.glitch .bt-card{border-left-color:#FF6B5B;background:rgba(255,107,91,.05);}
-  .bt-step.glitch .bt-card-label{position:relative;}
-  .bt-step.glitch .bt-card-label::after{
-    content:attr(data-glitch);position:absolute;left:1px;top:0;color:#FF6B5B;opacity:.5;
-    clip-path:inset(0 0 60% 0);transform:translateX(1px);
-  }
-  .broken-card{border-left-style:dashed;border-color:rgba(255,107,91,.4);}
-  .bt-connector{opacity:0;transition:opacity .5s ease .5s;}
-  .bt-wrap.reveal-stagger.in-view .bt-connector{opacity:1;}
-  /* alternating slide-in: steps 1,3,5 (odd) slide in from the left, steps 2,4 (even) from the right */
-  .bt-wrap.reveal-stagger .bt-step.stagger-child{transform:translateX(-60px);}
-  .bt-wrap.reveal-stagger .bt-step.stagger-child:nth-child(4n+3){transform:translateX(60px);}
-  .bt-wrap.reveal-stagger.in-view .bt-step.stagger-child{transform:translateX(0);}
-  .bt-wrap.reveal-stagger .stagger-child:nth-child(1){transition-delay:0s;}
-  .bt-wrap.reveal-stagger .stagger-child:nth-child(3){transition-delay:.15s;}
-  .bt-wrap.reveal-stagger .stagger-child:nth-child(5){transition-delay:.3s;}
-  .bt-wrap.reveal-stagger .stagger-child:nth-child(7){transition-delay:.45s;}
-  .bt-wrap.reveal-stagger .stagger-child:nth-child(9){transition-delay:.6s;}
-
-  .break-reveal{max-width:520px;margin:60px auto 0;padding-top:44px;border-top:1px solid rgba(255,255,255,.12);text-align:center;}
-  .br-row{margin:16px 0;}
-  .br-label{display:block;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px;}
-  .br-row.broken .br-label{color:#FF9C90;}
-  .br-row.fixed .br-label{color:var(--green);}
-  .br-flow{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;}
-  .br-chip{padding:7px 13px;border-radius:999px;font-size:12.5px;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;}
-  .br-row.broken .br-chip{background:rgba(255,107,91,.12);color:#FF9C90;border:1px solid rgba(255,107,91,.3);}
-  .br-row.fixed .br-chip{background:rgba(18,183,106,.14);color:#6EE7B0;border:1px solid rgba(18,183,106,.35);}
-  .br-arrow{opacity:.35;font-size:13px;}
-  .br-x{color:#FF6B5B;font-weight:800;font-size:16px;}
-  .break-reveal-down{font-size:20px;color:rgba(255,255,255,.3);margin:10px 0;}
-  .break-reveal-line{margin-top:30px;font-size:18px;color:rgba(255,255,255,.8);line-height:1.6;}
-  .break-reveal-line strong{color:var(--green);font-family:'Plus Jakarta Sans',sans-serif;display:block;margin-top:6px;font-size:22px;}
-  @media(max-width:560px){
-    .bt-card{padding:15px 18px;}
-    .bt-card-text{font-size:14px;}
-    .break-reveal-line{font-size:16px;}
-    .break-reveal-line strong{font-size:19px;}
-  }
 
   /* solution / mockup section */
   .solution-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;margin-top:52px;}
@@ -515,7 +463,7 @@
   .footer-top .brand-name{color:#fff;}
   .footer-top .brand-tagline{color:rgba(255,255,255,.55);display:block;}
 
-  @media(max-width:720px){.hero-seo-h1{font-size:28px;}.hero-subhead{font-size:19px;}.band h2{font-size:28px;}.hero .lede{font-size:15.5px;}}
+  @media(max-width:720px){.hero-seo-h1{font-size:28px;}.hero-seo-h1 .rot-line{min-height:76px;}.band h2{font-size:28px;}.hero .lede{font-size:15.5px;}}
 
   /* ===== shared app-view styles (portal / admin / forms) ===== */
   .section-label{
@@ -1006,12 +954,11 @@
     <div class="reveal" style="margin-bottom:18px;">
       <span class="eyebrow-pill">Verified specialists. Perfectly matched.</span>
     </div>
-    <h1 class="hero-seo-h1">Find the Right Accounting, Tax, Audit or Forensic Firm in Nigeria</h1>
-    <p class="hero-subhead">
-      <span class="hero-line">The right</span>
-      <span class="rot-wrap" id="rot-wrap"><span id="rot-text"></span><span class="rot-cursor" id="rot-cursor"></span></span>
-      <span class="hero-line">for the job.</span>
-    </p>
+    <h1 class="hero-seo-h1">
+      <span class="hero-line">Find the Right</span>
+      <span class="rot-line"><span class="rot-wrap" id="rot-wrap"><span id="rot-text"></span><span class="rot-cursor" id="rot-cursor"></span></span></span>
+      <span class="hero-line">Firm in Nigeria</span>
+    </h1>
     <p class="lede">Tell us what you're dealing with. Our team personally reviews your request and matches you with a verified specialist firm, based on the nature of the work, location, and how sensitive it is. No algorithm, no match score; a person makes the call.</p>
     <div class="hero-ctas">
       <button class="btn btn-orange" onclick="go('client')">Get Matched →</button>
@@ -1028,85 +975,6 @@
     <div class="tape-field" id="tape-field" aria-hidden="true"></div>
   </div>
 
-  <div class="band band-maroon dark" id="problem-band">
-
-    <div class="container">
-      <div style="text-align:center;" class="reveal">
-        <span class="eyebrow-pill">The problem</span>
-      </div>
-      <h2 class="reveal" style="text-align:center;">Finding anyone is easy. Finding someone you can trust is the hard part.</h2>
-      <p class="reveal problem-seo-subline">Stop searching accounting directories in Nigeria. Get matched to a vetted specialist firm instead.</p>
-
-      <div class="bt-wrap reveal-stagger" id="break-timeline">
-
-        <div class="bt-step stagger-child">
-          <div class="bt-card">
-            <div class="bt-card-label">Find a name</div>
-            <div class="bt-card-text">You search a directory.</div>
-          </div>
-        </div>
-        <div class="bt-connector" data-state="clean">
-          <svg viewBox="0 0 40 56" width="40" height="56"><line x1="20" y1="0" x2="20" y2="56" style="stroke:var(--green);stroke-width:2"/><circle cx="20" cy="28" r="5" style="fill:var(--green)"/></svg>
-        </div>
-
-        <div class="bt-step stagger-child">
-          <div class="bt-card">
-            <div class="bt-card-label">Explain the job</div>
-            <div class="bt-card-text">You call. You explain everything.</div>
-          </div>
-        </div>
-        <div class="bt-connector" data-state="clean">
-          <svg viewBox="0 0 40 56" width="40" height="56"><line x1="20" y1="0" x2="20" y2="56" style="stroke:var(--green);stroke-width:2"/><circle cx="20" cy="28" r="5" style="fill:var(--green)"/></svg>
-        </div>
-
-        <div class="bt-step stagger-child">
-          <div class="bt-card">
-            <div class="bt-card-label">Agree on a price</div>
-            <div class="bt-card-text">Everything seems straightforward.</div>
-          </div>
-        </div>
-        <div class="bt-connector" data-state="crack">
-          <svg viewBox="0 0 40 56" width="40" height="56"><path d="M20,0 L20,18 L27,27 L20,36 L20,56" fill="none" style="stroke:var(--amber);stroke-width:2"/><circle cx="20" cy="27" r="5" style="fill:var(--amber)"/></svg>
-        </div>
-
-        <div class="bt-step stagger-child glitch">
-          <div class="bt-card">
-            <div class="bt-card-label" data-glitch="Then it changes">Then it changes</div>
-            <div class="bt-card-text">Scope changes. Price changes.</div>
-          </div>
-        </div>
-        <div class="bt-connector" data-state="broken">
-          <svg viewBox="0 0 40 56" width="40" height="56"><path d="M20,0 L13,9 L27,17 L11,27 L29,37 L15,47 L20,56" fill="none" style="stroke:#FF6B5B;stroke-width:2"/><line x1="14" y1="24" x2="26" y2="34" style="stroke:#FF6B5B;stroke-width:2.5;stroke-linecap:round"/><line x1="26" y1="24" x2="14" y2="34" style="stroke:#FF6B5B;stroke-width:2.5;stroke-linecap:round"/></svg>
-        </div>
-
-        <div class="bt-step stagger-child glitch">
-          <div class="bt-card broken-card">
-            <div class="bt-card-label" data-glitch="Something goes wrong">Something goes wrong</div>
-            <div class="bt-card-text">And now, who do you call?</div>
-          </div>
-        </div>
-
-      </div>
-
-      <div class="break-reveal reveal">
-        <div class="br-row broken">
-          <span class="br-label">Broken process</span>
-          <div class="br-flow">
-            <span class="br-chip">Find</span><span class="br-arrow">→</span><span class="br-chip">Call</span><span class="br-arrow">→</span><span class="br-chip">Explain</span><span class="br-arrow">→</span><span class="br-chip">Negotiate</span><span class="br-arrow">→</span><span class="br-chip">Problems</span><span class="br-arrow">→</span><span class="br-x">✕</span>
-          </div>
-        </div>
-        <div class="break-reveal-down">↓</div>
-        <div class="br-row fixed">
-          <span class="br-label">FinProMatch</span>
-          <div class="br-flow">
-            <span class="br-chip">Brief</span><span class="br-arrow">→</span><span class="br-chip">Match</span><span class="br-arrow">→</span><span class="br-chip">Manage</span><span class="br-arrow">→</span><span class="br-chip">Complete</span>
-          </div>
-        </div>
-        <p class="break-reveal-line">You shouldn't have to manage the middle.<br><strong>FinProMatch stays in the deal.</strong></p>
-      </div>
-
-    </div>
-  </div>
 
   <div class="band band-green dark" id="solution">
     <div class="container">
@@ -1616,7 +1484,7 @@
 
 /* typewriter word in hero — types out, pauses, deletes, moves to next.
    Width tracks the actual text instead of reserving space for the longest word. */
-const rotWords = ['accounting firm', 'tax firm', 'forensic firm', 'audit firm', 'investigation firm'];
+const rotWords = ['Accounting', 'Tax Investigation', 'Forensic Accounting', 'Audit', 'Asset Tracing', 'Litigation Support', 'Bookkeeping'];
 function initRotatingWord(){
   const textEl = document.getElementById('rot-text');
   if(!textEl) return;
