@@ -5,7 +5,7 @@ function publicAccount(record) {
   return safe;
 }
 
-const { sensitivity, capacity, availability, verificationStatus, engagementStatus, messageSenderRole, leadStatus, notificationType } = require('./enumMaps');
+const { sensitivity, capacity, availability, verificationStatus, engagementStatus, messageSenderRole, leadStatus, notificationType, paymentStatus } = require('./enumMaps');
 
 /**
  * Reshapes a Firm DB record into the flatter/nested shape the frontend
@@ -42,6 +42,7 @@ function presentEngagement(eng) {
     ...eng,
     sensitivity: sensitivity.fromDb[eng.sensitivity],
     status: engagementStatus.fromDb[eng.status],
+    paymentStatus: paymentStatus.fromDb[eng.paymentStatus],
   };
 }
 

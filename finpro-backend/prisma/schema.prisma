@@ -92,6 +92,22 @@ enum GuestBriefStatus {
   CLOSED
 }
 
+/// Status of the one-off match fee a client pays to unlock a matched firm's
+/// contact details on an Engagement. PENDING covers the window between
+/// starting a Paystack transaction and it clearing (success, webhook, or the
+/// client abandoning it) — FAILED means Paystack itself reported failure,
+/// not "hasn't paid yet" (that's UNPAID). RELEASED is an admin bookkeeping
+/// step after PAID, same shape as the individual-professional track: funds
+/// are held by FinProMatch at PAID and admin releases them to the firm —
+/// contact details unlock at PAID already, RELEASED doesn't gate anything.
+enum PaymentStatus {
+  UNPAID
+  PENDING
+  PAID
+  RELEASED
+  FAILED
+}
+
 // ---------- models ----------
 
 /// Individual users — both clients and individual professionals (legacy track).
@@ -219,6 +235,20 @@ model Engagement {
 
   /// Set when a client requests a match "with this firm in mind" from a firm profile.
   interestedFirmId String?
+
+  /// Whole-naira match fee an admin sets once a firm is matched — what the
+  /// client pays to unlock that firm's direct contact details. Null until
+  /// admin sets one.
+  feeAmount      Int?
+  paymentStatus  PaymentStatus @default(UNPAID)
+  /// Set once a Paystack transaction for this engagement is confirmed PAID
+  /// — via the client's post-checkout verify call or the webhook, whichever
+  /// lands first.
+  paidAt         DateTime?
+  /// The reference we generate and hand to Paystack for the current/last
+  /// payment attempt, so the verify call and the webhook can both find
+  /// their way back to this row.
+  paystackRef    String?       @unique
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -18,6 +18,7 @@ const messagesRoutes = require('./routes/messages');
 const adminEngagementsRoutes = require('./routes/admin.engagements');
 const adminFirmsRoutes = require('./routes/admin.firms');
 const adminRoutes = require('./routes/admin');
+const webhooksPaystackRoutes = require('./routes/webhooks.paystack');
 
 const { router: leadsRoutes } = require('./routes/leads');
 const leadsProfessionalRoutes = require('./routes/leads.professional');
@@ -37,6 +38,13 @@ app.use(
     credentials: true,
   })
 );
+
+// Paystack webhooks MUST be mounted before express.json() below, with the
+// raw (unparsed) body — the signature check needs the exact bytes Paystack
+// sent, and once express.json() has consumed the request stream for any
+// path, this route can never get the raw bytes back.
+app.use('/api/webhooks', express.raw({ type: 'application/json' }), webhooksPaystackRoutes);
+
 app.use(express.json({ limit: '1mb' }));
 app.use(cookieParser());
 app.use(attachAuth); // decodes a bearer token into req.auth on every request, if present
