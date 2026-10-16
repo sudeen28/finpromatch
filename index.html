@@ -3152,7 +3152,9 @@ async function renderEngagementCard(eng){
           }
         } catch(err){ /* non-fatal — card just won't show contact details */ }
       } else if(eng.paymentStatus === 'pending'){
-        html += `<div class="msg" style="margin-top:14px;">Payment in progress — if you already completed checkout, this will update shortly. <button class="subtle-btn" onclick="renderClientDashboard()">Refresh</button></div>`;
+        html += `<div class="msg" style="margin-top:14px;">Payment in progress — if you already completed checkout, this will update shortly. <button class="subtle-btn" onclick="renderClientDashboard()">Refresh</button></div>
+        <button class="btn btn-brass btn-full" style="margin-top:12px;" id="pay-btn-${eng.id}" onclick="payEngagement('${eng.id}')">Pay ₦${Number(eng.feeAmount || 0).toLocaleString()} to FinProMatch</button>
+        <div class="hint" style="margin-top:6px;">Didn't finish checkout, or it's been a while? Pay again — any earlier attempt that never cleared will be superseded.</div>`;
       } else if(eng.feeAmount){
         html += `<div class="fee-breakdown" style="margin-top:14px;">
           <div class="fee-row total"><span>Engagement fee</span><span>₦${Number(eng.feeAmount).toLocaleString()}</span></div>
