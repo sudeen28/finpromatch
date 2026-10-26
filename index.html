@@ -1606,6 +1606,7 @@
 <section class="view" id="view-notifications">
   <div class="container app-section">
     <div class="session-bar">
+      <button class="subtle-btn" onclick="backToMyDashboard()">&larr; Back to my dashboard</button>
       <div class="section-label" style="margin:0;">Notifications</div>
       <button class="subtle-btn" id="notif-mark-all-btn" onclick="markAllNotificationsRead()">Mark all as read</button>
     </div>
@@ -2302,6 +2303,12 @@ async function apiFetch(path, { method = 'GET', body, token } = {}){
   try{
     res = await fetch(API_BASE + path, {
       method, headers,
+      // This data (payment status, messages, match state, etc.) can change
+      // moment to moment, and Express's default ETag on every JSON response
+      // makes the browser cache GET requests by default — a stale 304 can
+      // silently serve an old body (e.g. a firmContact that didn't exist
+      // yet before payment cleared) with no error at all. Never cache.
+      cache: 'no-store',
       body: body !== undefined ? JSON.stringify(body) : undefined
     });
   } catch(networkErr){
@@ -2504,6 +2511,14 @@ async function renderNotifications(){
     // reads the same to them either way, and is a lot less alarming.
     list.innerHTML = `<div class="notif-empty">No notifications yet.</div>`;
   }
+}
+
+function backToMyDashboard(){
+  if(session.client) return go('client');
+  if(session.pro) return go('pro');
+  if(session.firm) return go('list-firm');
+  if(adminSession) return go('admin');
+  go('home');
 }
 
 async function openNotification(role, token, id){
