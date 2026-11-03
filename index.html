@@ -639,6 +639,29 @@
     border-left:1px dashed var(--line-strong);padding-left:10px;white-space:nowrap;
   }
 
+  /* collapsible engagement cards (client dashboard + admin): a clickable
+     header row that expands into the full details, so a long list of
+     requests reads as a tidy list instead of one endless scroll. */
+  .eng-card,.pro-card.eng-card{padding:0;overflow:hidden;}
+  .eng-row{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:18px 22px 18px 26px;cursor:pointer;user-select:none;transition:background .15s ease;}
+  .eng-row:hover{background:rgba(7,20,38,.03);}
+  .eng-row:focus-visible{outline:2px solid var(--orange);outline-offset:-2px;}
+  .eng-row-main{min-width:0;}
+  .eng-row-main h4{margin:0;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:17px;}
+  .eng-row-main .hint{margin:4px 0 0;}
+  .eng-row-side{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end;flex-shrink:0;}
+  .eng-chevron{display:inline-flex;width:22px;height:22px;align-items:center;justify-content:center;color:var(--ink-soft);transition:transform .25s ease;}
+  .eng-card.open .eng-chevron{transform:rotate(180deg);}
+  .eng-body{padding:4px 22px 22px 26px;border-top:1px solid var(--line);}
+  .eng-section-head{display:flex;align-items:baseline;gap:10px;margin:34px 0 4px;}
+  .eng-section-head h3{margin:0;font-size:20px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;}
+  @media(max-width:560px){.eng-row{flex-direction:column;align-items:flex-start;}.eng-row-side{justify-content:flex-start;}}
+  .admin-overview-list{display:flex;flex-direction:column;gap:10px;margin-top:6px;}
+  .admin-attn{display:flex;justify-content:space-between;align-items:center;gap:14px;background:var(--paper-card);border:1px solid var(--line-strong);border-radius:var(--radius-sm);padding:14px 18px;cursor:pointer;transition:border-color .15s ease, box-shadow .2s ease;}
+  .admin-attn:hover{border-color:var(--orange);box-shadow:0 6px 16px rgba(7,20,38,.06);}
+  .admin-attn strong{font-family:'Plus Jakarta Sans',sans-serif;}
+  .admin-attn .num{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:18px;color:var(--orange-dark);}
+
   .ledger-strip{display:flex;gap:0;margin:22px 0 30px;border-top:1px solid var(--line-strong);border-bottom:1px solid var(--line-strong);}
   .ledger-strip-item{flex:1;padding:14px 18px;border-right:1px solid var(--line-strong);cursor:pointer;transition:background .15s;}
   .ledger-strip-item:hover{background:var(--paper-card);}
@@ -2316,9 +2339,37 @@ async function apiFetch(path, { method = 'GET', body, token } = {}){
   }
   try{ data = await res.json(); } catch(e){ data = {}; }
   if(!res.ok){
+    // A 401 on a request that carried a token means the saved login has
+    // expired (or been invalidated). Drop it so the UI stops showing
+    // "Log out" for an account the server no longer recognises.
+    if(res.status === 401 && token) handleExpiredSession(token);
     throw new ApiError(data.error || `Request failed (${res.status}).`);
   }
   return data;
+}
+
+function handleExpiredSession(token){
+  let changed = false;
+  ['client','pro','firm'].forEach(role => {
+    if(session[role] && session[role].token === token){ session[role] = null; changed = true; }
+  });
+  const adminExpired = !!(adminSession && adminSession.token === token);
+  if(adminExpired){ adminSession = null; changed = true; }
+  if(!changed) return;
+  saveSessionToStorage();
+  // Re-render whichever screen is showing so the login form replaces the dead dashboard.
+  setTimeout(() => {
+    const active = document.querySelector('.view.active');
+    const view = active ? active.id.replace('view-', '') : 'home';
+    if(view === 'client') renderClientPortal();
+    else if(view === 'pro') renderProPortal();
+    else if(view === 'list-firm') renderFirmPortal();
+    else if(view === 'admin'){
+      hideAdminPanel();
+      const msg = document.getElementById('admin-gate-msg');
+      if(msg) msg.innerHTML = '<div class="msg error">Your session expired. Please sign in again.</div>';
+    }
+  }, 0);
 }
 
 const api = {
@@ -2834,17 +2885,40 @@ async function renderClientDashboard(){
       <div class="ledger-strip-item" onclick="scrollToStage('matched')" role="button" tabindex="0"><div class="ledger-strip-num">${activeCount}</div><div class="ledger-strip-label">Matched / active</div></div>
       <div class="ledger-strip-item" onclick="scrollToStage('completed')" role="button" tabindex="0"><div class="ledger-strip-num">${doneCount}</div><div class="ledger-strip-label">Completed</div></div>
     </div>
-    ${interestNote}
-    ${renderEngagementForm(user, editingEng)}`;
+    ${interestNote}`;
 
   if(engFetchError) html += `<div class="msg error">${esc(engFetchError)}</div>`;
-  if(!myEngagements.length){
-    html += `<div class="empty">No engagement requests yet. Submit one above.</div>`;
-  } else {
-    for(const eng of myEngagements){
-      html += await renderEngagementCard(eng);
-    }
+
+  // Matched engagements first — that's where the next action is (accept the
+  // introduction, pay, reach the firm). Everything else follows as a list of
+  // clickable cards; the new-request form moves below them.
+  const stageOf = (e) => (ENGAGEMENT_STATUSES[e.status]||{}).stage;
+  const stageRank = { matched: 0, reviewing: 1, completed: 2, closed: 3 };
+  const matchedEngs = myEngagements.filter(e => stageOf(e) === 'matched');
+  const otherEngs = myEngagements
+    .filter(e => stageOf(e) !== 'matched')
+    .sort((a, b) => (stageRank[stageOf(a)] ?? 9) - (stageRank[stageOf(b)] ?? 9));
+
+  if(matchedEngs.length){
+    html += `<div class="eng-section-head"><h3>Your match${matchedEngs.length > 1 ? 'es' : ''}</h3><span class="hint">${matchedEngs.length}</span></div>
+      <p class="hint" style="margin-bottom:14px;">Accept the introduction, pay the fee, and reach your firm from here.</p>`;
+    for(const eng of matchedEngs) html += await renderEngagementCard(eng);
   }
+  if(otherEngs.length){
+    html += `<div class="eng-section-head"><h3>${matchedEngs.length ? 'Other requests' : 'Your requests'}</h3><span class="hint">${otherEngs.length}</span></div>
+      <p class="hint" style="margin-bottom:14px;">Tap a request to see its details.</p>`;
+    for(const eng of otherEngs) html += await renderEngagementCard(eng);
+  }
+  if(!myEngagements.length){
+    html += `<div class="empty">No engagement requests yet. Submit your first one below.</div>`;
+  }
+
+  // The form stays out of the way once there's something else to look at,
+  // unless they're editing a request or arrived from a firm profile.
+  const showForm = !!editingEng || !myEngagements.length || !!pendingFirmInterest;
+  html += `<div class="eng-section-head"><h3>${editingEng ? 'Edit request' : 'New request'}</h3></div>
+    ${showForm ? '' : `<button class="btn btn-outline" id="new-req-btn" onclick="toggleNewRequestForm()">+ New engagement request</button>`}
+    <div id="new-request-form" style="display:${showForm ? 'block' : 'none'};margin-top:16px;">${renderEngagementForm(user, editingEng)}</div>`;
 
   html += `
     <div style="margin-top:52px;padding-top:32px;border-top:1px solid var(--line-strong);">
@@ -2861,9 +2935,20 @@ async function renderClientDashboard(){
 
 let editingEngagementId = null;
 
+function toggleNewRequestForm(){
+  const form = document.getElementById('new-request-form');
+  const btn = document.getElementById('new-req-btn');
+  if(!form) return;
+  const opening = form.style.display === 'none';
+  form.style.display = opening ? 'block' : 'none';
+  if(btn) btn.textContent = opening ? '− Hide form' : '+ New engagement request';
+  if(opening) form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
 function scrollToStage(stage){
   const target = document.querySelector(`#client-dash-area [data-stage="${stage}"]`) || document.querySelector(`#legacy-lead-area [data-stage="${stage}"]`);
   if(target){
+    if(target.classList.contains('eng-card') && !target.classList.contains('open')) toggleEngCard(target.id);
     target.scrollIntoView({ behavior: 'smooth', block: 'center' });
     target.style.transition = 'box-shadow .3s ease';
     target.style.boxShadow = '0 0 0 3px var(--orange)';
@@ -3103,18 +3188,58 @@ async function deleteEngagement(id){
   }
 }
 
+/* ---------- collapsible engagement cards (client + admin) ---------- */
+// domId -> true/false once the person has opened or closed a card by hand,
+// so a re-render (after saving a fee, sending a message…) keeps it as they left it.
+const engCardState = new Map();
+function engCardIsOpen(domId, defaultOpen){
+  return engCardState.has(domId) ? engCardState.get(domId) : !!defaultOpen;
+}
+function toggleEngCard(domId){
+  const card = document.getElementById(domId);
+  if(!card) return;
+  const open = !card.classList.contains('open');
+  card.classList.toggle('open', open);
+  const body = card.querySelector(':scope > .eng-body');
+  if(body) body.style.display = open ? 'block' : 'none';
+  const row = card.querySelector(':scope > .eng-row');
+  if(row) row.setAttribute('aria-expanded', open ? 'true' : 'false');
+  engCardState.set(domId, open);
+}
+function engRowKey(event, domId){
+  if(event.key === 'Enter' || event.key === ' '){ event.preventDefault(); toggleEngCard(domId); }
+}
+const ENG_CHEVRON_SVG = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+
+/** Small payment-state pill shown next to an engagement's status. */
+function paymentBadgeHtml(eng){
+  if(!(eng.selectedFirmIds||[]).length) return '';
+  if(eng.paymentStatus === 'released') return '<span class="tag status-paid">Fee released</span>';
+  if(eng.paymentStatus === 'paid') return '<span class="tag status-paid">Paid</span>';
+  if(eng.paymentStatus === 'pending') return '<span class="tag status-pending">Checkout started</span>';
+  if(eng.feeAmount) return '<span class="tag status-matched">Fee set</span>';
+  return '';
+}
+
 async function renderEngagementCard(eng){
   const statusInfo = ENGAGEMENT_STATUSES[eng.status] || ENGAGEMENT_STATUSES.new;
-  let html = `<div class="case-card ${railClass(statusInfo.stage)}" id="eng-card-${eng.id}" data-stage="${statusInfo.stage}">
-    <div class="case-card-top">
-      <h4>${esc(eng.engagementType)}</h4>
-      <div style="display:flex;align-items:center;gap:10px;">
+  const domId = 'eng-card-' + eng.id;
+  // Matched engagements start open — that's what the client most wants to see.
+  const isOpen = engCardIsOpen(domId, statusInfo.stage === 'matched');
+  let html = `<div class="case-card eng-card ${railClass(statusInfo.stage)} ${isOpen ? 'open' : ''}" id="${domId}" data-stage="${statusInfo.stage}">
+    <div class="eng-row" role="button" tabindex="0" aria-expanded="${isOpen}" onclick="toggleEngCard('${domId}')" onkeydown="engRowKey(event,'${domId}')">
+      <div class="eng-row-main">
+        <h4>${esc(eng.engagementType)}</h4>
+        <p class="hint">${esc(eng.industry)}${eng.company ? ' · ' + esc(eng.company) : ''} · submitted ${new Date(eng.createdAt).toLocaleDateString()} · <span class="case-ref" style="border:0;padding:0;">${shortRef(eng.id,'ENG')}</span></p>
+      </div>
+      <div class="eng-row-side">
         ${engagementStatusTag(eng.status)}
-        <span class="case-ref">${shortRef(eng.id,'ENG')}</span>
+        ${paymentBadgeHtml(eng)}
+        <span class="eng-chevron">${ENG_CHEVRON_SVG}</span>
       </div>
     </div>
-    <p class="hint">${esc(eng.industry)}${eng.company ? ' · ' + esc(eng.company) : ''} · submitted ${new Date(eng.createdAt).toLocaleDateString()}</p>
-    <p style="font-size:14px;">${esc(eng.details)}</p>
+    <div class="eng-body" style="display:${isOpen ? 'block' : 'none'};">
+    <p style="font-size:14px;margin-top:16px;">${esc(eng.details)}</p>
     ${renderTypeAnswersHtml(eng)}
     <div class="grid-actions" style="margin-top:12px;">
       ${statusInfo.stage === 'reviewing' ? `<button class="subtle-btn" onclick="startEditEngagement('${eng.id}')">Edit request</button>` : ''}
@@ -3165,7 +3290,11 @@ async function renderEngagementCard(eng){
               <p class="hint">Payment is confirmed, so you're free to coordinate directly. Your contract and payment record stay on FinProMatch either way.</p>
             </div>`;
           }
-        } catch(err){ /* non-fatal — card just won't show contact details */ }
+        } catch(err){
+          // Don't fail silently — a missing contact card with no explanation
+          // looks like the payment didn't register.
+          html += `<div class="msg error" style="margin-top:14px;">Payment is confirmed, but we couldn't load the firm's contact details just now (${esc(err.message)}). <button class="subtle-btn" onclick="renderClientDashboard()">Try again</button></div>`;
+        }
       } else if(eng.paymentStatus === 'pending'){
         html += `<div class="msg" style="margin-top:14px;">Payment in progress — if you already completed checkout, this will update shortly. <button class="subtle-btn" onclick="renderClientDashboard()">Refresh</button></div>
         <button class="btn btn-brass btn-full" style="margin-top:12px;" id="pay-btn-${eng.id}" onclick="payEngagement('${eng.id}')">Pay ₦${Number(eng.feeAmount || 0).toLocaleString()} to FinProMatch</button>
@@ -3194,7 +3323,7 @@ async function renderEngagementCard(eng){
 
   html += await renderMessageThreadHtml(eng.id, 'client');
 
-  html += `</div>`;
+  html += `</div></div>`; // closes .eng-body and the card
   return html;
 }
 
@@ -4464,8 +4593,34 @@ function adminLogout(){
   hideAdminPanel();
 }
 
-let adminTab = 'engagements';
-function setAdminTab(tab){ adminTab = tab; renderAdmin(); }
+let adminTab = 'overview';
+const ADMIN_TABS = ['overview','engagements','firms','pros','leads','briefs'];
+// Switching tabs just shows/hides panels that are already on the page —
+// no re-fetch, so it's instant and any half-typed fee or message survives.
+function setAdminTab(tab){
+  adminTab = tab;
+  ADMIN_TABS.forEach(t => {
+    const panel = document.getElementById('admin-tab-' + t);
+    if(panel) panel.style.display = (t === tab) ? 'block' : 'none';
+    const btn = document.getElementById('admin-tabbtn-' + t);
+    if(btn) btn.classList.toggle('active', t === tab);
+  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+// Jump from an Overview row to the right tab, optionally pre-filtering engagements.
+function adminGoTo(tab, stage, engId){
+  setAdminTab(tab);
+  if(tab === 'engagements'){
+    const sel = document.getElementById('admin-eng-filter-stage');
+    if(sel){ sel.value = stage || ''; applyAdminEngFilters(); }
+    if(engId){
+      const domId = 'admin-eng-' + engId;
+      if(!engCardIsOpen(domId, false)) toggleEngCard(domId);
+      const el = document.getElementById(domId);
+      if(el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+}
 function applyAdminEngFilters(){
   const stage = document.getElementById('admin-eng-filter-stage')?.value || '';
   const sensitivity = document.getElementById('admin-eng-filter-sensitivity')?.value || '';
@@ -4512,7 +4667,34 @@ async function renderAdmin(){
   const pendingProCount = stats.prosNeedingReview;
   const activeLeadCount = leads.filter(l => l.status !== 'released').length;
 
+  // Things that need a human right now — each row jumps to the right tab.
+  const paidAwaitingRelease = engagements.filter(e => e.paymentStatus === 'paid');
+  const newBriefCount = guestBriefs.filter(b => b.status === 'NEW').length;
+  const attnRow = (num, label, sub, onclick) => num > 0 ? `
+    <div class="admin-attn" role="button" tabindex="0" onclick="${onclick}">
+      <div><strong>${label}</strong><div class="hint">${sub}</div></div>
+      <div class="num">${num}</div>
+    </div>` : '';
+  const attnHtml = [
+    attnRow(reviewingCount, 'Engagement requests awaiting a match', 'Pick a firm and send the introduction', `adminGoTo('engagements','reviewing')`),
+    attnRow(paidAwaitingRelease.length, 'Paid — fee ready to release', 'Client has paid; release once the work is underway', `adminGoTo('engagements','matched')`),
+    attnRow(pendingFirmCount, 'Firms waiting for verification', 'Review credentials and verify or request info', `adminGoTo('firms')`),
+    attnRow(pendingProCount, 'Professionals waiting for verification', 'Individual accountants awaiting review', `adminGoTo('pros')`),
+    attnRow(newBriefCount, 'New quick briefs', 'Homepage enquiries with no account yet', `adminGoTo('briefs')`)
+  ].join('');
+
+  const tabBtn = (id, label, count) => `<button id="admin-tabbtn-${id}" class="${adminTab===id?'active':''}" onclick="setAdminTab('${id}')">${label}${count === undefined ? '' : ` <span class="hint">(${count})</span>`}</button>`;
   let html = `
+    <div class="dash-tabs" style="margin-bottom:22px;">
+      ${tabBtn('overview', 'Overview')}
+      ${tabBtn('engagements', 'Engagement Requests', engagements.length)}
+      ${tabBtn('firms', 'Firms', firms.length)}
+      ${tabBtn('pros', 'Professionals', pros.length)}
+      ${tabBtn('leads', 'Individual Requests', activeLeadCount)}
+      ${tabBtn('briefs', 'Quick Briefs', newBriefCount)}
+    </div>`;
+
+  html += `<div id="admin-tab-overview" style="display:${adminTab==='overview'?'block':'none'};">
     <div class="admin-stats-grid">
       <div class="admin-stat"><div class="admin-stat-num">${reviewingCount}</div><div class="admin-stat-label">Awaiting review</div></div>
       <div class="admin-stat"><div class="admin-stat-num">${matchedCount}</div><div class="admin-stat-label">Matched / active</div></div>
@@ -4521,13 +4703,9 @@ async function renderAdmin(){
       <div class="admin-stat"><div class="admin-stat-num">${verifiedFirmCount}</div><div class="admin-stat-label">Verified firms</div></div>
       <div class="admin-stat"><div class="admin-stat-num">${pendingProCount}</div><div class="admin-stat-label">Pros needing review</div></div>
     </div>
-    <div class="dash-tabs" style="margin-bottom:22px;">
-      <button class="${adminTab==='engagements'?'active':''}" onclick="setAdminTab('engagements')">Engagement Requests <span class="hint">(${engagements.length})</span></button>
-      <button class="${adminTab==='firms'?'active':''}" onclick="setAdminTab('firms')">Firms <span class="hint">(${firms.length})</span></button>
-      <button class="${adminTab==='pros'?'active':''}" onclick="setAdminTab('pros')">Professionals <span class="hint">(${pros.length})</span></button>
-      <button class="${adminTab==='leads'?'active':''}" onclick="setAdminTab('leads')">Individual Requests <span class="hint">(${activeLeadCount})</span></button>
-      <button class="${adminTab==='briefs'?'active':''}" onclick="setAdminTab('briefs')">Quick Briefs <span class="hint">(${guestBriefs.filter(b => b.status === 'NEW').length})</span></button>
-    </div>`;
+    <h3 style="font-size:19px;margin:8px 0 4px;">Needs your attention</h3>
+    ${attnHtml ? `<div class="admin-overview-list">${attnHtml}</div>` : `<div class="empty">You're all caught up. Nothing is waiting on you.</div>`}
+  </div>`;
 
   html += `<div id="admin-tab-engagements" style="display:${adminTab==='engagements'?'block':'none'};">`;
   html += `<h3 style="font-size:19px;margin:0 0 4px;">Engagement requests <span class="hint">(${engagements.length})</span></h3>`;
@@ -4788,11 +4966,12 @@ async function renderAdminEngagementCard(eng, allFirms){
       paymentHtml = `<div class="fee-breakdown" style="margin-top:14px;">
         <div class="fee-row"><span>Collected from client</span><span>₦${Number(eng.feeAmount||0).toLocaleString()}</span></div>
         <div class="fee-row"><span>FinProMatch commission</span><span>₦${commission.toLocaleString()}</span></div>
-        <div class="fee-row total"><span>Release to ${esc(firmName)}</span><span>₦${payout.toLocaleString()}</span></div>
+        <div class="fee-row total"><span>Payout owed to ${esc(firmName)}</span><span>₦${payout.toLocaleString()}</span></div>
       </div>
-      <button class="btn btn-brass btn-sm" style="margin-top:12px;" onclick="releaseEngagementPayment('${eng.id}')">Release payment to firm</button>`;
+      <button class="btn btn-brass btn-sm" style="margin-top:12px;" onclick="releaseEngagementPayment('${eng.id}')">Mark payout as sent to firm</button>
+      <p class="hint" style="margin-top:8px;">This only records the payout in FinProMatch. It does not move money — transfer ₦${payout.toLocaleString()} to the firm from your Paystack dashboard or bank first.</p>`;
     } else if(eng.paymentStatus === 'released'){
-      paymentHtml = `<p class="hint" style="color:var(--green);margin-top:12px;">Payment released to the firm. Non-circumvention term applies.</p>`;
+      paymentHtml = `<p class="hint" style="color:var(--green);margin-top:12px;">Payout recorded as sent to the firm. Non-circumvention term applies.</p>`;
     } else if(eng.paymentStatus === 'pending'){
       paymentHtml = `<p class="hint" style="margin-top:12px;">Client has started checkout — this will update automatically once it clears.</p>`;
     } else {
@@ -4805,12 +4984,24 @@ async function renderAdminEngagementCard(eng, allFirms){
     }
   }
 
-  return `<div class="pro-card">
-    <div class="pro-card-top">
-      <h4>${esc(eng.engagementType)}: ${esc(eng.clientName)}${eng.company ? ' (' + esc(eng.company) + ')' : ''}</h4>
-      ${engagementStatusTag(eng.status)}
+  const adminStage = (ENGAGEMENT_STATUSES[eng.status] || {}).stage || '';
+  const adminDomId = 'admin-eng-' + eng.id;
+  // Closed by default so the list scans like an inbox; click a row to open it.
+  const adminOpen = engCardIsOpen(adminDomId, false);
+  return `<div class="pro-card eng-card ${adminOpen ? 'open' : ''}" id="${adminDomId}">
+    <div class="eng-row" role="button" tabindex="0" aria-expanded="${adminOpen}" onclick="toggleEngCard('${adminDomId}')" onkeydown="engRowKey(event,'${adminDomId}')">
+      <div class="eng-row-main">
+        <h4>${esc(eng.engagementType)}: ${esc(eng.clientName)}${eng.company ? ' (' + esc(eng.company) + ')' : ''}</h4>
+        <p class="hint">${esc(eng.industry)} · submitted ${new Date(eng.createdAt).toLocaleDateString()}</p>
+      </div>
+      <div class="eng-row-side">
+        ${engagementStatusTag(eng.status)}
+        ${paymentBadgeHtml(eng)}
+        <span class="eng-chevron">${ENG_CHEVRON_SVG}</span>
+      </div>
     </div>
-    <p class="hint">${esc(eng.industry)} · ${esc(eng.businessSize)} · ${[eng.city, eng.state, eng.country].filter(Boolean).map(esc).join(', ')}${eng.onSiteRequired ? ' · On-site required' : ' · Remote OK'}</p>
+    <div class="eng-body" style="display:${adminOpen ? 'block' : 'none'};">
+    <p class="hint" style="margin-top:14px;">${esc(eng.industry)} · ${esc(eng.businessSize)} · ${[eng.city, eng.state, eng.country].filter(Boolean).map(esc).join(', ')}${eng.onSiteRequired ? ' · On-site required' : ' · Remote OK'}</p>
     <p class="hint"><strong>Sensitivity:</strong> ${sensitivity.label} · <strong>Suggested capacity:</strong> ${suggestedCapacity.label} <span class="hint">(based on business size, a hint for you, not a filter)</span></p>
     <p style="font-size:14px;">${esc(eng.details)}</p>
     <p class="hint">Deadline: ${eng.deadline ? new Date(eng.deadline).toLocaleDateString() : 'not specified'} · Est. value: ${esc(eng.estimatedValue)||'not specified'} · Duration: ${esc(eng.expectedDuration)||'not specified'}</p>
@@ -4831,6 +5022,7 @@ async function renderAdminEngagementCard(eng, allFirms){
 
     <div id="admin-firm-search-${eng.id}" style="display:none;margin-top:16px;"></div>
     <div id="admin-messages-${eng.id}" style="display:none;margin-top:16px;"></div>
+    </div>
   </div>`;
 }
 
@@ -4948,6 +5140,7 @@ async function setEngagementFee(engId){
 }
 
 async function releaseEngagementPayment(engId){
+  if(!confirm('This only records the payout as sent. It does NOT transfer money. Have you already paid the firm?')) return;
   try{
     await api.admin.engagements.releasePayment(adminSession.token, engId);
     renderAdmin();
