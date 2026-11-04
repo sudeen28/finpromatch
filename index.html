@@ -2543,11 +2543,22 @@ async function renderNotifications(){
     const items = [];
     results.forEach(r => r.notifications.forEach(n => items.push({ ...n, _role: r.role, _token: r.token })));
     items.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+    // Payment history for client accounts, shown above the notifications.
+    let paymentsHtml = '';
+    if(session.client){
+      try{
+        const { engagements } = await api.engagements.mine(session.client.token);
+        if(paymentHistoryItems(engagements).length){
+          paymentsHtml = `<div class="eng-section-head" style="margin-top:0;"><h3>Payment history</h3></div>${paymentHistoryHtml(engagements)}<div class="eng-section-head"><h3>Notifications</h3></div>`;
+        }
+      } catch(e){ /* payments block just doesn't show */ }
+    }
     if(!items.length){
-      list.innerHTML = `<div class="notif-empty">No notifications yet.</div>`;
+      list.innerHTML = paymentsHtml + `<div class="notif-empty">No notifications yet.</div>`;
       return;
     }
-    list.innerHTML = items.map(n => `
+    list.innerHTML = paymentsHtml + items.map(n => `
       <div class="notif-item ${n.read ? '' : 'unread'}" onclick="openNotification('${n._role}','${n._token}','${n.id}')">
         <div class="notif-dot"></div>
         <div class="notif-body">
@@ -2588,7 +2599,11 @@ async function markAllNotificationsRead(){
 }
 
 /* ---------- nav ---------- */
+let firmProfileReturn = 'firms';   // where "Back" on a firm profile should go
 function go(view){
+  const prevActive = document.querySelector('.view.active');
+  const prevView = prevActive ? prevActive.id.replace('view-', '') : 'home';
+  if(view === 'firm-profile' && prevView !== 'firm-profile') firmProfileReturn = prevView;
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   document.getElementById('view-' + view).classList.add('active');
   document.querySelectorAll('.navlinks button').forEach(b => b.classList.toggle('active', b.dataset.view === view));
@@ -2913,6 +2928,11 @@ async function renderClientDashboard(){
     html += `<div class="empty">No engagement requests yet. Submit your first one below.</div>`;
   }
 
+  if(paymentHistoryItems(myEngagements).length){
+    html += `<div class="eng-section-head" id="payment-history"><h3>Payment history</h3><span class="hint">${paymentHistoryItems(myEngagements).length}</span></div>
+      ${paymentHistoryHtml(myEngagements)}`;
+  }
+
   // The form stays out of the way once there's something else to look at,
   // unless they're editing a request or arrived from a firm profile.
   const showForm = !!editingEng || !myEngagements.length || !!pendingFirmInterest;
@@ -3210,6 +3230,27 @@ function engRowKey(event, domId){
   if(event.key === 'Enter' || event.key === ' '){ event.preventDefault(); toggleEngCard(domId); }
 }
 const ENG_CHEVRON_SVG = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+
+/** Engagements that have a payment trail worth listing (paid, released, or checkout started). */
+function paymentHistoryItems(engs){
+  return (engs || [])
+    .filter(e => ['paid','released','pending','failed'].includes(e.paymentStatus) && e.feeAmount)
+    .sort((a, b) => new Date(b.updatedAt || b.createdAt) - new Date(a.updatedAt || a.createdAt));
+}
+function paymentHistoryHtml(engs){
+  const items = paymentHistoryItems(engs);
+  if(!items.length) return `<div class="empty">No payments yet. When you pay a matched firm's fee, the receipt shows up here.</div>`;
+  const label = { paid:'Paid', released:'Paid · firm payout sent', pending:'Checkout not completed', failed:'Payment failed' };
+  const cls = { paid:'status-paid', released:'status-paid', pending:'status-pending', failed:'status-pending' };
+  return `<div class="admin-overview-list">` + items.map(e => `
+    <div class="admin-attn" style="cursor:default;">
+      <div>
+        <strong>₦${Number(e.feeAmount).toLocaleString()} · ${esc(e.engagementType)}</strong>
+        <div class="hint">${new Date(e.updatedAt || e.createdAt).toLocaleDateString()} · ${shortRef(e.id,'ENG')}${e.paystackRef ? ' · Ref ' + esc(e.paystackRef) : ''}</div>
+      </div>
+      <span class="tag ${cls[e.paymentStatus]}">${label[e.paymentStatus]}</span>
+    </div>`).join('') + `</div>`;
+}
 
 /** Small payment-state pill shown next to an engagement's status. */
 function paymentBadgeHtml(eng){
@@ -4489,7 +4530,7 @@ async function renderFirmProfile(){
   const isOwnProfile = !!(session.firm && session.firm.user.id === f.id);
 
   area.innerHTML = `
-    <button class="subtle-btn" onclick="go('firms')" style="margin-bottom:20px;">← Back to firms</button>
+    <button class="subtle-btn" onclick="go(firmProfileReturn || 'firms')" style="margin-bottom:20px;">← ${({client:'Back to my dashboard',pro:'Back to my dashboard','list-firm':'Back to my dashboard',admin:'Back to team dashboard',notifications:'Back to notifications'})[firmProfileReturn] || 'Back to firms'}</button>
     <div class="firm-hero">
       <div class="firm-logo">${esc(f.logoInitials||'TB')}</div>
       <div class="firm-hero-info">
