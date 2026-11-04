@@ -556,6 +556,24 @@
   .faq-a{font-size:14.5px;color:var(--ink-soft);opacity:0;transform:translateY(-6px);transition:opacity .3s ease .05s, transform .3s ease .05s;padding:14px 0 2px 48px;line-height:1.6;}
   .faq-item.open .faq-a{opacity:1;transform:translateY(0);}
 
+  .legal-doc{max-width:760px;margin:0 auto;}
+  .legal-doc h2{font-size:30px;margin:6px 0 4px;}
+  .legal-doc h4{font-size:16px;margin:26px 0 6px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;}
+  .legal-doc p,.legal-doc li{font-size:14.5px;line-height:1.7;color:var(--ink-soft,inherit);}
+  .legal-doc ul{padding-left:20px;margin:6px 0 10px;}
+  .legal-updated{font-size:12.5px;opacity:.7;margin-bottom:18px;}
+  .legal-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 22px;}
+  .legal-tabs button{border:1px solid var(--line-strong);background:transparent;padding:8px 14px;border-radius:999px;font:inherit;font-size:13px;font-weight:600;cursor:pointer;color:inherit;}
+  .legal-tabs button.active{background:var(--ink);color:#fff;border-color:var(--ink);}
+  .social-row{display:flex;gap:10px;flex-wrap:wrap;}
+  .social-ico{width:38px;height:38px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.28);color:#fff;text-decoration:none;transition:background .15s;}
+  .social-ico:hover{background:rgba(255,255,255,.14);}
+  .social-ico.off{opacity:.4;cursor:default;}
+  .social-ico.off:hover{background:transparent;}
+  .social-row.light .social-ico{border-color:var(--line-strong);color:var(--ink);}
+  .social-row.light .social-ico:hover{background:var(--cream-deep);}
+  .terms-consent{display:flex;gap:10px;align-items:flex-start;margin-top:14px;font-size:13.5px;line-height:1.5;}
+  .terms-consent input{width:auto;margin-top:3px;flex:none;}
   footer{background:var(--ink);color:rgba(255,255,255,.6);padding:44px 0;font-size:13.5px;}
   footer a{color:#fff;}
   .footer-top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;padding-bottom:24px;border-bottom:1px solid rgba(255,255,255,.12);margin-bottom:24px;}
@@ -1003,7 +1021,7 @@
       "name": "When do I pay?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Only on the individual-professional track, and only after you've chosen a matched professional and signed the one-page contract. Nothing is charged before that. Firm engagements don't currently have a payment step through FinProMatch."
+        "text": "Nothing is charged until our team has matched you with a firm and you have accepted the introduction. You then pay the engagement fee set for your request, securely through Paystack, and the firm's contact details unlock once payment clears."
       }
     },
     {
@@ -1512,7 +1530,7 @@
           <span class="faq-q-text">When do I pay?</span>
           <span class="plus">+</span>
         </div>
-        <div class="faq-a-wrap"><div class="faq-a">Only on the individual-professional track, and only after you've chosen a matched professional and signed the one-page contract. Nothing is charged before that. Firm engagements don't currently have a payment step through FinProMatch.</div></div>
+        <div class="faq-a-wrap"><div class="faq-a">Nothing is charged until our team has matched you with a firm and you've accepted the introduction. You then pay the engagement fee set for your request, securely through Paystack, and the firm's contact details unlock once payment clears. See our <a href="#" onclick="openLegal('refund');return false;">Refund Policy</a> for details.</div></div>
       </div>
       <div class="faq-item" data-i="10" onclick="toggleFaq(10)">
         <div class="faq-q">
@@ -1544,12 +1562,12 @@
       <div id="contact" class="stub-block reveal">
         <div class="section-label">Contact</div>
         <h3 class="stub-h3">Get in touch</h3>
-        <p class="stub-p">FinProMatch is early. The most reliable way to reach us right now is by creating a client or professional account and submitting a request or application. Dedicated support channels are still being set up.</p>
+        <p class="stub-p">Questions, payment issues or feedback? Email us at <a href="mailto:finpromatch@gmail.com">finpromatch@gmail.com</a> and we'll reply within two business days. You can also <a href="#" onclick="openLegal('contact');return false;">see all our contact details</a>.</p>
       </div>
       <div id="legal" class="stub-block reveal">
-        <div class="section-label">Terms & Privacy</div>
-        <h3 class="stub-h3">Terms of Service & Privacy Policy</h3>
-        <p class="stub-p"><em>Placeholder, not yet finalized.</em> FinProMatch's full Terms of Service and Privacy Policy are being drafted with legal counsel and will be published here before the platform handles real client data or payments at scale. Nothing on this page currently constitutes a binding agreement.</p>
+        <div class="section-label">Legal</div>
+        <h3 class="stub-h3">Terms, Privacy &amp; Refunds</h3>
+        <p class="stub-p">Read how FinProMatch works and how we handle your data and payments: <a href="#" onclick="openLegal('terms');return false;">Terms &amp; Conditions</a> · <a href="#" onclick="openLegal('privacy');return false;">Privacy Policy</a> · <a href="#" onclick="openLegal('refund');return false;">Refund Policy</a>.</p>
       </div>
     </div>
   </div>
@@ -1576,11 +1594,16 @@
           <a href="#" onclick="go('pro');return false;">For Professionals</a>
           <a href="#" onclick="scrollToSection('solution');return false;">How It Works</a>
           <a href="#" onclick="scrollToSection('about');return false;">About</a>
-          <a href="#" onclick="scrollToSection('contact');return false;">Contact</a>
+          <a href="#" onclick="openLegal('contact');return false;">Contact</a>
           <a href="#" onclick="scrollToSection('faqs');return false;">FAQ</a>
-          <a href="#" onclick="scrollToSection('legal');return false;">Terms</a>
-          <a href="#" onclick="scrollToSection('legal');return false;">Privacy</a>
+          <a href="#" onclick="openLegal('terms');return false;">Terms</a>
+          <a href="#" onclick="openLegal('privacy');return false;">Privacy</a>
+          <a href="#" onclick="openLegal('refund');return false;">Refunds</a>
         </div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;margin-bottom:20px;">
+        <a href="mailto:finpromatch@gmail.com" style="color:#fff;">finpromatch@gmail.com</a>
+        <div class="social-row" id="footer-social"></div>
       </div>
       © 2026 FinProMatch. A managed marketplace matching Nigerian businesses with the right specialist accounting, tax, audit and forensic firms.
     </div>
@@ -1634,6 +1657,14 @@
       <button class="subtle-btn" id="notif-mark-all-btn" onclick="markAllNotificationsRead()">Mark all as read</button>
     </div>
     <div id="notifications-list"></div>
+  </div>
+</section>
+
+<!-- LEGAL & CONTACT -->
+<section class="view" id="view-legal">
+  <div class="container app-section">
+    <button class="subtle-btn" id="legal-back-btn" onclick="go(legalReturn || 'home')">&larr; Back</button>
+    <div id="legal-area" class="legal-doc"></div>
   </div>
 </section>
 
@@ -1922,6 +1953,7 @@ function scrollToSection(id){
 document.addEventListener('DOMContentLoaded', () => {
   loadSessionFromStorage();
   handlePaymentCallback();
+  initSocialIcons();
   refreshNotificationBell();
   initGoogleAuth();
   initRotatingWord();
@@ -2598,12 +2630,222 @@ async function markAllNotificationsRead(){
   refreshNotificationBell();
 }
 
+/* ---------- legal pages, contact & social ---------- */
+const CONTACT_EMAIL = 'finpromatch@gmail.com';
+// Paste your real page links between the quotes. Icons with no link show
+// dimmed and do nothing until you add one.
+const SOCIAL_LINKS = {
+  instagram: '',
+  x: '',
+  linkedin: '',
+  facebook: '',
+  whatsapp: ''
+};
+const SOCIAL_ICONS = {
+  instagram: { label: 'Instagram', svg: '<rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>' },
+  x: { label: 'X (Twitter)', svg: '<path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/>' },
+  linkedin: { label: 'LinkedIn', svg: '<path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/>' },
+  facebook: { label: 'Facebook', svg: '<path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>' },
+  whatsapp: { label: 'WhatsApp', svg: '<path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>' }
+};
+function socialIconsHtml(){
+  return Object.keys(SOCIAL_ICONS).map(k => {
+    const { label, svg } = SOCIAL_ICONS[k];
+    const url = SOCIAL_LINKS[k];
+    const icon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${svg}</svg>`;
+    return url
+      ? `<a class="social-ico" href="${esc(url)}" target="_blank" rel="noopener noreferrer" aria-label="FinProMatch on ${label}" title="${label}">${icon}</a>`
+      : `<span class="social-ico off" aria-label="${label} (coming soon)" title="${label} — coming soon">${icon}</span>`;
+  }).join('');
+}
+function initSocialIcons(){
+  const el = document.getElementById('footer-social');
+  if(el) el.innerHTML = socialIconsHtml();
+}
+
+let legalDoc = 'terms';
+function openLegal(doc){ legalDoc = doc; go('legal'); }
+function setLegalDoc(doc){ legalDoc = doc; renderLegal(); window.scrollTo({ top: 0, behavior: 'instant' }); }
+
+const LEGAL_UPDATED = '4 November 2026';
+const LEGAL_DOCS = {
+  terms: { title: 'Terms & Conditions', html: `
+    <p>These Terms &amp; Conditions ("Terms") govern your use of FinProMatch ("FinProMatch", "we", "us"), a managed marketplace that introduces Nigerian businesses and individuals ("Clients") to independent accounting, tax, audit, forensic and advisory firms and professionals ("Firms"). By creating an account, submitting a request or making a payment, you agree to these Terms.</p>
+
+    <h4>1. What FinProMatch does</h4>
+    <p>FinProMatch reviews each engagement request personally, selects a suitable Firm, and introduces the two of you. We are an introducer and payment facilitator. We are not an accounting, tax, audit, legal or financial advisory firm, and we do not provide those services ourselves.</p>
+
+    <h4>2. Accounts and eligibility</h4>
+    <ul>
+      <li>You must be at least 18 and able to enter a binding contract. Business users confirm they are authorised to act for their organisation.</li>
+      <li>Information you give us must be accurate and kept up to date. You are responsible for activity under your account and for keeping your login secure.</li>
+    </ul>
+
+    <h4>3. How matching works</h4>
+    <ul>
+      <li>Matching is done by our team by hand. We do not guarantee that a Firm will be available, will accept your engagement, or will achieve any particular outcome.</li>
+      <li>We check Firms' credentials as described on our platform before marking them "verified", but Firms remain independent businesses. We do not supervise their work.</li>
+      <li>You may decline an introduction. We may offer a different Firm where we are able to.</li>
+    </ul>
+
+    <h4>4. Fees and payment</h4>
+    <ul>
+      <li>After you accept an introduction, we set an engagement fee in Nigerian Naira (₦) for your request. The fee is shown to you before you pay.</li>
+      <li>Payments are processed by Paystack. We do not see or store your card or bank details.</li>
+      <li>The fee includes FinProMatch's service commission. Our commission is deducted before the balance is paid to the Firm.</li>
+      <li>Unless we say otherwise in writing, the fee covers the introduction and our handling of the engagement fee. Any additional work agreed directly between you and the Firm outside the fee is between you and that Firm.</li>
+      <li>Your payment is confirmed only when Paystack confirms it to us. Always keep your payment receipt.</li>
+    </ul>
+
+    <h4>5. Release of Firm contact details</h4>
+    <p>Once your payment is confirmed, we release the Firm's direct contact details so that you can coordinate the work. Our message thread on the platform remains available to you throughout.</p>
+
+    <h4>6. Non-circumvention</h4>
+    <p>Where FinProMatch introduces you to a Firm, you and the Firm agree not to avoid FinProMatch's fee by dealing directly for the same engagement, or for renewals and repeat work arising from that introduction, for 12 months after the introduction. This applies to both Clients and Firms.</p>
+
+    <h4>7. Firm responsibilities</h4>
+    <p>Firms must hold and keep valid any registrations or credentials they have told us about, provide services with reasonable skill and care and in line with the law and professional standards, respond to Clients promptly, and keep Client information confidential.</p>
+
+    <h4>8. Client responsibilities</h4>
+    <p>Clients must give the Firm accurate information and what it reasonably needs to do the work, and must not use FinProMatch for anything unlawful, including tax evasion, money laundering or concealing proceeds of crime.</p>
+
+    <h4>9. No professional advice</h4>
+    <p>Content on FinProMatch is general information, not accounting, tax, legal or financial advice. Any advice you receive is given by the Firm, not by FinProMatch.</p>
+
+    <h4>10. Limitation of liability</h4>
+    <p>To the extent the law allows, FinProMatch is not liable for the quality, outcome or timing of services delivered by a Firm, or for indirect or consequential losses. Our total liability to you for any claim relating to an engagement is limited to the fee you paid us for that engagement. Nothing in these Terms limits liability that cannot lawfully be limited.</p>
+
+    <h4>11. Suspension and termination</h4>
+    <p>We may suspend or close an account that breaches these Terms, provides false information, or puts other users at risk. You may stop using FinProMatch at any time and ask us to delete your account, subject to the records we must keep by law.</p>
+
+    <h4>12. Complaints and disputes</h4>
+    <p>If something goes wrong, email <a href="mailto:finpromatch@gmail.com">finpromatch@gmail.com</a> first and we will try to resolve it. These Terms are governed by the laws of the Federal Republic of Nigeria, and the Nigerian courts have jurisdiction.</p>
+
+    <h4>13. Changes</h4>
+    <p>We may update these Terms. The date at the top shows the latest version. Changes do not affect an engagement you have already paid for.</p>
+
+    <h4>14. Contact</h4>
+    <p>FinProMatch, <a href="mailto:finpromatch@gmail.com">finpromatch@gmail.com</a>.</p>` },
+
+  privacy: { title: 'Privacy Policy', html: `
+    <p>This policy explains what personal data FinProMatch collects, why, and your rights. We handle personal data in line with the Nigeria Data Protection Act 2023 (NDPA). For this policy, FinProMatch is the data controller.</p>
+
+    <h4>1. Data we collect</h4>
+    <ul>
+      <li><strong>Account data:</strong> name, email address, password (stored hashed, never in plain text), or your Google account name and email if you sign in with Google.</li>
+      <li><strong>Request data:</strong> the details you give us about your engagement, such as business type, industry, location, deadline and the description of your problem. Please avoid including sensitive information you do not need to share.</li>
+      <li><strong>Firm and professional data:</strong> business details, registration numbers, specialisations and contact details provided for verification and listing.</li>
+      <li><strong>Payment records:</strong> the amount, date, status and Paystack transaction reference. Card and bank details are collected and handled by Paystack, not by us.</li>
+      <li><strong>Messages</strong> you exchange on the platform, and basic technical data such as browser type needed to run the site.</li>
+    </ul>
+
+    <h4>2. Why we use it</h4>
+    <ul>
+      <li>To create and secure your account and run the matching service (performance of our contract with you).</li>
+      <li>To introduce you to a suitable Firm, including sharing your request details and, after you accept, your contact details.</li>
+      <li>To process payments, prevent fraud and keep financial records (contract and legal obligation).</li>
+      <li>To send service messages, such as match updates, payment confirmations and notifications.</li>
+      <li>To improve the platform and keep it safe (legitimate interest).</li>
+    </ul>
+
+    <h4>3. Who we share it with</h4>
+    <ul>
+      <li><strong>The matched Firm</strong>, only the information needed to consider and deliver your engagement.</li>
+      <li><strong>Service providers</strong> who help us run the platform: Paystack (payments), our hosting and database providers (Render, Vercel and Neon) and Google (if you use Google sign-in).</li>
+      <li><strong>Authorities</strong>, where the law requires it.</li>
+    </ul>
+    <p>We do not sell your personal data.</p>
+
+    <h4>4. Where data is stored</h4>
+    <p>Our providers may process data on servers outside Nigeria. Where that happens, we rely on providers that apply appropriate safeguards, in line with the NDPA.</p>
+
+    <h4>5. How long we keep it</h4>
+    <p>We keep account and engagement data while your account is active, and payment and contract records for as long as the law requires us to keep financial records. You can ask us to delete your account and we will remove or anonymise what we are not required to keep.</p>
+
+    <h4>6. Security</h4>
+    <p>We use encrypted connections, hashed passwords and access controls. No system is perfectly secure, so please use a strong, unique password and do not share it.</p>
+
+    <h4>7. Your rights</h4>
+    <p>Under the NDPA you can ask us to access, correct, delete or restrict the use of your personal data, object to certain uses, and receive a copy of your data. Email <a href="mailto:finpromatch@gmail.com">finpromatch@gmail.com</a> and we will respond within a reasonable time. You can also complain to the Nigeria Data Protection Commission.</p>
+
+    <h4>8. Browser storage</h4>
+    <p>We store your login session in your browser's local storage so that you stay signed in. We do not use it for advertising. Logging out clears it.</p>
+
+    <h4>9. Children</h4>
+    <p>FinProMatch is for people aged 18 and over. We do not knowingly collect data from children.</p>
+
+    <h4>10. Changes and contact</h4>
+    <p>We may update this policy and will change the date above when we do. Questions: <a href="mailto:finpromatch@gmail.com">finpromatch@gmail.com</a>.</p>` },
+
+  refund: { title: 'Refund Policy', html: `
+    <p>This policy applies to the engagement fee you pay to FinProMatch through Paystack.</p>
+
+    <h4>1. When you are entitled to a refund</h4>
+    <p>We will refund the fee in full if, after you have paid:</p>
+    <ul>
+      <li>the matched Firm declines or withdraws from your engagement before work begins;</li>
+      <li>the Firm does not respond to you within 7 days of your payment and we cannot arrange a replacement you are happy with; or</li>
+      <li>you were charged in error, charged twice, or the amount charged does not match the fee shown to you.</li>
+    </ul>
+
+    <h4>2. Partial or no refund</h4>
+    <ul>
+      <li>Once work has started and we have recorded the Firm's payout, the fee is generally non-refundable. If you have a complaint about the quality of the work, contact us and we will review it case by case and may arrange a partial refund or a replacement Firm.</li>
+      <li>Changing your mind after the Firm's contact details have been released is not, on its own, a reason for a refund, because the introduction has already been delivered.</li>
+    </ul>
+
+    <h4>3. How to ask for a refund</h4>
+    <p>Email <a href="mailto:finpromatch@gmail.com">finpromatch@gmail.com</a> with your account email, the engagement reference (for example ENG-8727F5), and the reason. We aim to reply within 2 business days.</p>
+
+    <h4>4. How refunds are paid</h4>
+    <p>Approved refunds go back to the original payment method through Paystack. They normally take 5 to 10 business days to show, depending on your bank or card issuer. Any Paystack processing charges that the payment provider does not return to us may be deducted from the refund, and we will tell you before this happens.</p>
+
+    <h4>5. Failed or incomplete payments</h4>
+    <p>If checkout did not complete, you were not charged. If money left your account but the engagement still shows unpaid, wait a few minutes and refresh your dashboard, then contact us with your Paystack receipt and we will check it.</p>` },
+
+  contact: { title: 'Contact', html: `
+    <p>We are a small team and read every message.</p>
+    <h4>Email</h4>
+    <p><a href="mailto:finpromatch@gmail.com">finpromatch@gmail.com</a><br>We reply within 2 business days.</p>
+    <h4>What to include</h4>
+    <ul>
+      <li>The email address on your FinProMatch account.</li>
+      <li>The engagement reference (for example ENG-8727F5), if your question is about a request or payment.</li>
+      <li>For a payment problem, your Paystack receipt or transaction reference. Never email your full card number or PIN.</li>
+    </ul>
+    <h4>Follow us</h4>
+    <div class="social-row light" id="contact-social"></div>
+    <h4>Policies</h4>
+    <p><a href="#" onclick="setLegalDoc('terms');return false;">Terms &amp; Conditions</a> · <a href="#" onclick="setLegalDoc('privacy');return false;">Privacy Policy</a> · <a href="#" onclick="setLegalDoc('refund');return false;">Refund Policy</a></p>` }
+};
+
+function renderLegal(){
+  const area = document.getElementById('legal-area');
+  if(!area) return;
+  if(!LEGAL_DOCS[legalDoc]) legalDoc = 'terms';
+  const doc = LEGAL_DOCS[legalDoc];
+  const backLabels = { client: 'Back to my dashboard', pro: 'Back to my dashboard', 'list-firm': 'Back to my dashboard', admin: 'Back to team dashboard', notifications: 'Back to notifications', 'firm-profile': 'Back to firm profile', firms: 'Back to firms' };
+  const backBtn = document.getElementById('legal-back-btn');
+  if(backBtn) backBtn.innerHTML = '&larr; ' + (backLabels[legalReturn] || 'Back to home');
+  area.innerHTML = `
+    <div class="legal-tabs">
+      ${Object.keys(LEGAL_DOCS).map(k => `<button class="${k === legalDoc ? 'active' : ''}" onclick="setLegalDoc('${k}')">${LEGAL_DOCS[k].title}</button>`).join('')}
+    </div>
+    <h2>${doc.title}</h2>
+    ${legalDoc === 'contact' ? '' : `<div class="legal-updated">Last updated ${LEGAL_UPDATED}</div>`}
+    ${doc.html}`;
+  const cs = document.getElementById('contact-social');
+  if(cs) cs.innerHTML = socialIconsHtml();
+}
+
 /* ---------- nav ---------- */
+let legalReturn = 'home';
 let firmProfileReturn = 'firms';   // where "Back" on a firm profile should go
 function go(view){
   const prevActive = document.querySelector('.view.active');
   const prevView = prevActive ? prevActive.id.replace('view-', '') : 'home';
   if(view === 'firm-profile' && prevView !== 'firm-profile') firmProfileReturn = prevView;
+  if(view === 'legal' && prevView !== 'legal') legalReturn = prevView;
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   document.getElementById('view-' + view).classList.add('active');
   document.querySelectorAll('.navlinks button').forEach(b => b.classList.toggle('active', b.dataset.view === view));
@@ -2618,6 +2860,7 @@ function go(view){
   if(view === 'firm-profile') renderFirmProfile();
   if(view === 'list-firm') renderFirmPortal();
   if(view === 'notifications') renderNotifications();
+  if(view === 'legal') renderLegal();
   refreshNotificationBell();
 }
 
@@ -3338,13 +3581,15 @@ async function renderEngagementCard(eng){
         }
       } else if(eng.paymentStatus === 'pending'){
         html += `<div class="msg" style="margin-top:14px;">Payment in progress — if you already completed checkout, this will update shortly. <button class="subtle-btn" onclick="renderClientDashboard()">Refresh</button></div>
-        <button class="btn btn-brass btn-full" style="margin-top:12px;" id="pay-btn-${eng.id}" onclick="payEngagement('${eng.id}')">Pay ₦${Number(eng.feeAmount || 0).toLocaleString()} to FinProMatch</button>
+        ${termsConsentHtml(eng.id)}
+        <button class="btn btn-brass btn-full" style="margin-top:12px;" id="pay-btn-${eng.id}" onclick="payEngagement('${eng.id}')" disabled>Pay ₦${Number(eng.feeAmount || 0).toLocaleString()} to FinProMatch</button>
         <div class="hint" style="margin-top:6px;">Didn't finish checkout, or it's been a while? Pay again — any earlier attempt that never cleared will be superseded.</div>`;
       } else if(eng.feeAmount){
         html += `<div class="fee-breakdown" style="margin-top:14px;">
           <div class="fee-row total"><span>Engagement fee</span><span>₦${Number(eng.feeAmount).toLocaleString()}</span></div>
         </div>
-        <button class="btn btn-brass btn-full" style="margin-top:12px;" id="pay-btn-${eng.id}" onclick="payEngagement('${eng.id}')">Pay ₦${Number(eng.feeAmount).toLocaleString()} to FinProMatch</button>
+        ${termsConsentHtml(eng.id)}
+        <button class="btn btn-brass btn-full" style="margin-top:12px;" id="pay-btn-${eng.id}" onclick="payEngagement('${eng.id}')" disabled>Pay ₦${Number(eng.feeAmount).toLocaleString()} to FinProMatch</button>
         <div class="disclaimer">Paid securely through Paystack. Once payment clears, you'll get the firm's direct contact details — your contract and payment record stay on FinProMatch either way.</div>`;
       } else {
         html += `<p class="hint" style="margin-top:12px;">FinProMatch is finalizing the fee for this engagement — you'll be able to pay shortly.</p>`;
@@ -3384,7 +3629,16 @@ async function acceptIntroduction(engId, firmId){
  * Confirmation happens when Paystack redirects back (handlePaymentCallback)
  * or, as a backstop, via the server-side webhook.
  */
+function termsConsentHtml(engId){
+  return `<label class="terms-consent" onclick="event.stopPropagation()">
+    <input type="checkbox" id="terms-${engId}" onchange="document.getElementById('pay-btn-${engId}').disabled = !this.checked">
+    <span>I have read and agree to the <a href="#" onclick="openLegal('terms');return false;">Terms &amp; Conditions</a>, <a href="#" onclick="openLegal('refund');return false;">Refund Policy</a> and <a href="#" onclick="openLegal('privacy');return false;">Privacy Policy</a>.</span>
+  </label>`;
+}
+
 async function payEngagement(engId){
+  const consent = document.getElementById('terms-' + engId);
+  if(consent && !consent.checked){ alert('Please read and accept the Terms & Conditions before paying.'); return; }
   const btn = document.getElementById('pay-btn-' + engId);
   const originalText = btn ? btn.textContent : '';
   if(btn){ btn.disabled = true; btn.textContent = 'Starting checkout…'; }
