@@ -622,6 +622,92 @@
     .hp-path{padding:24px;}
     .hp-hero .hero-ctas .btn{width:100%;}
   }
+  /* ---------- homepage polish (readability, hierarchy) ---------- */
+  :root{--hp-text:#364452;}
+  .navlinks button{font-weight:500;color:var(--ink-soft);}
+  .navlinks button:hover{background:transparent;color:var(--ink);}
+  .navlinks .nav-cta{color:#fff;font-weight:700;font-size:14.5px;padding:12px 24px;margin-left:14px;box-shadow:0 6px 16px -6px rgba(14,159,110,.6);}
+  .navlinks .nav-cta:hover{color:#fff;background:var(--orange-dark);}
+  .hp-hero{padding-top:64px;padding-bottom:80px;}
+  .hp-hero-grid{gap:56px;}
+  .hp-h1{font-size:54px;margin-top:26px;line-height:1.08;}
+  .hp-hero .lede{font-size:20px;line-height:1.6;color:var(--hp-text);margin-top:28px;max-width:560px;}
+  .hp-hero .hero-ctas{margin-top:40px;gap:16px;}
+  .hp-hero .hero-ctas .btn{padding:17px 32px;font-size:16px;}
+  .hp-hero-note{margin-top:26px;font-size:15.5px;line-height:1.6;color:var(--hp-text);}
+  .hp-trust-list strong{font-size:16.5px;}
+  .hp-trust-list span{font-size:15px;color:var(--hp-text);}
+  .hp-head h2{font-size:38px;line-height:1.15;}
+  .hp-head .band-sub{font-size:17px;color:var(--hp-text);max-width:600px;}
+  .hp-path p,.hp-why p,.hp-service-group a span{font-size:15.5px;color:var(--hp-text);}
+  .hp-why h4{font-size:18px;}
+  .hp-service-group a strong{font-size:17px;}
+  /* hero mock-up */
+  .hp-preview-label{font-size:12px;margin-bottom:10px;}
+  .hp-mock{background:#fff;border:1px solid var(--line-strong);border-radius:16px;padding:30px;box-shadow:0 28px 60px -28px rgba(7,20,38,.45);display:flex;flex-direction:column;gap:22px;pointer-events:none;user-select:none;}
+  .hp-mock-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;}
+  .hp-mock-kicker{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:4px;}
+  .hp-mock-title{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:24px;}
+  .hp-mock-status{background:var(--cream-deep);color:#0B7A55;font-weight:700;font-size:13.5px;padding:7px 14px;border-radius:999px;white-space:nowrap;}
+  .hp-mock-firm{display:flex;gap:16px;align-items:center;padding:18px;border:1px solid var(--line-strong);border-radius:12px;}
+  .hp-mock-avatar{width:52px;height:52px;border-radius:12px;background:var(--ink);color:#fff;font-weight:800;font-size:18px;display:flex;align-items:center;justify-content:center;flex:none;}
+  .hp-mock-firm-name{font-weight:800;font-size:18px;}
+  .hp-mock-meta{font-size:15px;color:var(--hp-text);margin-top:2px;}
+  .hp-mock-why ul{margin:6px 0 0;padding-left:20px;font-size:16px;line-height:1.65;color:var(--hp-text);}
+  .hp-mock-actions{display:flex;gap:12px;flex-wrap:wrap;}
+  .hp-mock-btn{background:var(--orange);color:#fff;font-weight:700;font-size:15.5px;padding:13px 22px;border-radius:999px;}
+  .hp-mock-btn.ghost{background:#fff;color:var(--ink);border:1.5px solid var(--line-strong);}
+  .hp-mock-foot{font-size:13.5px;color:var(--ink-soft);border-top:1px solid var(--line-strong);padding-top:14px;}
+  /* process */
+  .hp-steps{gap:24px;counter-reset:none;}
+  .hp-steps li{padding:30px 26px;display:flex;flex-direction:column;gap:10px;border-top:4px solid var(--green);}
+  .hp-step-n{width:40px;height:40px;font-size:17px;margin:0 0 6px;}
+  .hp-steps h4{font-size:19px;line-height:1.25;margin:0;}
+  .hp-steps p{font-size:15.5px;line-height:1.6;color:var(--hp-text);}
+  /* FAQ */
+  .hp-faq{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.6fr);gap:64px;align-items:start;}
+  .hp-faq-side{position:sticky;top:110px;}
+  .hp-faq-side h2{font-size:38px;line-height:1.15;margin:14px 0 16px;text-align:left;}
+  .hp-faq-side p{font-size:16.5px;line-height:1.6;color:var(--hp-text);margin:0 0 24px;}
+  .hp-faq .faq-list{max-width:none;margin:0;gap:12px;}
+  .hp-faq-group{font-size:12.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);margin:26px 0 2px;}
+  .hp-faq-group:first-child{margin-top:0;}
+  .hp-faq .faq-item{padding:22px 26px;border-radius:14px;}
+  .hp-faq .faq-index{display:none;}
+  .hp-faq .faq-q{font-size:18px;line-height:1.35;gap:18px;}
+  .hp-faq .faq-a{font-size:16.5px;line-height:1.7;color:var(--hp-text);padding:16px 8px 4px 0;}
+  .hp-faq .faq-a a{color:var(--green);text-decoration:underline;font-weight:600;}
+  .hp-faq-side .btn{text-decoration:none;}
+  footer{border-top:1px solid rgba(255,255,255,.1);}
+  /* footer */
+  footer{padding:64px 0 32px;font-size:15px;color:rgba(255,255,255,.78);}
+  .ft-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:48px;padding-bottom:40px;border-bottom:1px solid rgba(255,255,255,.14);}
+  .ft-brand .brand-name{color:#fff;font-size:20px;}
+  .ft-blurb{margin:18px 0;font-size:15px;line-height:1.65;max-width:340px;color:rgba(255,255,255,.78);}
+  .ft-email{display:inline-block;font-weight:600;font-size:16px;margin-bottom:20px;color:#fff;}
+  .ft-col h4{color:#fff;font-size:14px;letter-spacing:.08em;text-transform:uppercase;margin:0 0 18px;font-family:'Plus Jakarta Sans',sans-serif;}
+  .ft-col a{display:block;color:rgba(255,255,255,.82);font-size:15.5px;padding:6px 0;text-decoration:none;}
+  .ft-col a:hover,.ft-email:hover{color:#fff;text-decoration:underline;}
+  .ft-col a:focus-visible,.ft-email:focus-visible{outline:2px solid var(--green);outline-offset:3px;}
+  .ft-bottom{padding-top:24px;font-size:14px;color:rgba(255,255,255,.65);}
+  @media (max-width:980px){
+    .hp-faq{grid-template-columns:1fr;gap:32px;}
+    .hp-faq-side{position:static;}
+    .ft-grid{grid-template-columns:1fr 1fr;gap:36px;}
+  }
+  @media (max-width:720px){
+    .hp-h1{font-size:36px;}
+    .hp-hero{padding-top:96px;padding-bottom:48px;}
+    .hp-hero .lede{font-size:18px;}
+    .hp-hero .hero-ctas .btn{padding:16px 24px;}
+    .hp-head h2,.hp-faq-side h2{font-size:30px;}
+    .hp-mock{padding:22px;gap:18px;}
+    .hp-mock-title{font-size:20px;}
+    .hp-mock-top{flex-direction:column;}
+    .hp-faq .faq-item{padding:18px 18px;}
+    .hp-faq .faq-q{font-size:16.5px;}
+    .ft-grid{grid-template-columns:1fr;}
+  }
   /* ---------- client portal shell ---------- */
   body.portal-mode .navlinks .nav-link,body.portal-mode .navlinks .nav-burger{display:none !important;}
   .portal{display:grid;grid-template-columns:230px minmax(0,1fr);gap:32px;align-items:start;}
@@ -1245,21 +1331,27 @@
         </div>
         <p class="hp-hero-note">Tax investigations, forensic accounting, audit, bookkeeping and more. Firm owner? <a href="#" onclick="go('list-firm');return false;">List your firm</a>.</p>
       </div>
-      <div class="hp-preview" aria-label="Example of the client dashboard">
-        <div class="hp-preview-label">Example view · illustrative data</div>
-        <div class="pt-card hp-preview-card">
-          <div class="pt-card-top">
-            <div><div class="pt-eyebrow">Active engagement</div><h3 class="pt-h3">Tax investigation</h3><p class="hint">ENG-EXAMPLE · Submitted 12 Oct</p></div>
-            <span class="tag status-matched">Firm matched: your reply needed</span>
+      <div class="hp-preview" role="img" aria-label="Example of a matched firm shown in the FinProMatch client dashboard, using illustrative data">
+        <div class="hp-preview-label">Example · illustrative data</div>
+        <div class="hp-mock">
+          <div class="hp-mock-top">
+            <div><div class="hp-mock-kicker">Your request</div><div class="hp-mock-title">Tax investigation</div></div>
+            <span class="hp-mock-status">Firm matched</span>
           </div>
-          <div class="pt-next action"><div><div class="pt-eyebrow">What happens next</div><div>Review the matched firm, then accept the introduction if you are happy to proceed.</div></div></div>
-          <ol class="pt-timeline">
-            <li class="done"><span class="pt-dot">✓</span><span class="pt-step-label">Request received</span></li>
-            <li class="done"><span class="pt-dot">✓</span><span class="pt-step-label">Review</span></li>
-            <li class="done"><span class="pt-dot">✓</span><span class="pt-step-label">Firm matched</span></li>
-            <li class="current"><span class="pt-dot"></span><span class="pt-step-label">Introduction accepted</span></li>
-            <li class="todo"><span class="pt-dot"></span><span class="pt-step-label">Payment</span></li>
-          </ol>
+          <div class="hp-mock-firm">
+            <div class="hp-mock-avatar">EA</div>
+            <div><div class="hp-mock-firm-name">Example Advisory LLP</div><div class="hp-mock-meta">Tax investigations · Lagos</div></div>
+          </div>
+          <div class="hp-mock-why">
+            <div class="hp-mock-kicker">Why we chose them</div>
+            <ul>
+              <li>Handles tax investigations and FIRS reviews</li>
+              <li>Based in Lagos, matching your location</li>
+              <li>Has capacity for an engagement of your size</li>
+            </ul>
+          </div>
+          <div class="hp-mock-actions"><span class="hp-mock-btn">Accept introduction</span><span class="hp-mock-btn ghost">Message our team</span></div>
+          <div class="hp-mock-foot">Step 3 of 5 · Your reply</div>
         </div>
       </div>
     </div>
@@ -1402,12 +1494,16 @@
   </div>
 
 <div class="band" id="faqs">
-    <div class="container">
-      <div style="text-align:center;" class="reveal">
+    <div class="container hp-faq">
+      <div class="hp-faq-side">
         <span class="eyebrow-pill reveal">Frequently asked questions</span>
+        <h2 class="reveal">Questions, answered</h2>
+        <p>Can't find what you're looking for? Email us and a person will reply. We aim to respond within 2 business days.</p>
+        <a class="btn btn-primary" href="mailto:finpromatch@gmail.com">Email finpromatch@gmail.com</a>
       </div>
-      <h2 class="reveal">A few questions you might have.</h2>
-      <div class="faq-list reveal-stagger" id="faq-list">
+      <div class="hp-faq-main">
+        <div class="faq-list" id="faq-list">
+      <div class="hp-faq-group">Getting matched</div>
       <div class="faq-item" data-i="0" onclick="toggleFaq(0)">
         <div class="faq-q">
           <span class="faq-index">01</span>
@@ -1415,46 +1511,6 @@
           <span class="plus">+</span>
         </div>
         <div class="faq-a-wrap"><div class="faq-a">Tell us what you're dealing with: the type of work, your industry, location, and how sensitive it is. Our team reviews the request personally and identifies which specialist firm is the right fit, then makes the introduction. There's also a separate, lighter-weight option to work with an individual professional directly for smaller, simpler work.</div></div>
-      </div>
-      <div class="faq-item" data-i="1" onclick="toggleFaq(1)">
-        <div class="faq-q">
-          <span class="faq-index">02</span>
-          <span class="faq-q-text">What's the difference between getting matched with a firm and finding an individual professional?</span>
-          <span class="plus">+</span>
-        </div>
-        <div class="faq-a-wrap"><div class="faq-a">Firm matching is for engagements where specialisation, location, and capacity genuinely matter: tax investigations, forensic accounting, audits, asset tracing, restructuring and similar work. The individual professional track is a lighter option for smaller, routine work (like a single filing), and includes an optional contract-and-payment process through FinProMatch. Both are manually reviewed by our team; use whichever fits what you need.</div></div>
-      </div>
-      <div class="faq-item" data-i="2" onclick="toggleFaq(2)">
-        <div class="faq-q">
-          <span class="faq-index">03</span>
-          <span class="faq-q-text">How are professionals and firms verified?</span>
-          <span class="plus">+</span>
-        </div>
-        <div class="faq-a-wrap"><div class="faq-a">Our team reviews the details that professionals and firms submit, such as professional body registration (ICAN, ANAN, CITN or equivalent), experience and specialisations, before marking them verified. It's a manual review. Verification does not guarantee the outcome of any engagement.</div></div>
-      </div>
-      <div class="faq-item" data-i="3" onclick="toggleFaq(3)">
-        <div class="faq-q">
-          <span class="faq-index">04</span>
-          <span class="faq-q-text">How do I choose an individual professional?</span>
-          <span class="plus">+</span>
-        </div>
-        <div class="faq-a-wrap"><div class="faq-a">After you submit a request on the individual-professional track, we send you two to three matched professionals with their experience and specialisations. You pick the one that fits and we set up the contract. Firm matching works differently: FinProMatch's team makes the introduction rather than presenting you with a list to choose from.</div></div>
-      </div>
-      <div class="faq-item" data-i="4" onclick="toggleFaq(4)">
-        <div class="faq-q">
-          <span class="faq-index">05</span>
-          <span class="faq-q-text">How does payment work?</span>
-          <span class="plus">+</span>
-        </div>
-        <div class="faq-a-wrap"><div class="faq-a">For firm engagements, once you accept an introduction we set a fee and you pay FinProMatch securely through Paystack. We never see your card details. The firm's contact details unlock when payment is confirmed. We keep a service commission and pay the balance to the firm. FinProMatch is not a bank or a regulated escrow provider. See our <a href="#" onclick="openLegal('refund');return false;">Refund Policy</a>. On the individual-professional track, payment is held until the work is marked delivered, then released minus our commission.</div></div>
-      </div>
-      <div class="faq-item" data-i="5" onclick="toggleFaq(5)">
-        <div class="faq-q">
-          <span class="faq-index">06</span>
-          <span class="faq-q-text">What happens if I'm unhappy with the work?</span>
-          <span class="plus">+</span>
-        </div>
-        <div class="faq-a-wrap"><div class="faq-a">Tell us at <a href="mailto:finpromatch@gmail.com">finpromatch@gmail.com</a>. We will look at what went wrong and, where it makes sense, re-match you or review the engagement. Our <a href="#" onclick="openLegal('refund');return false;">Refund Policy</a> explains when refunds apply.</div></div>
       </div>
       <div class="faq-item" data-i="6" onclick="toggleFaq(6)">
         <div class="faq-q">
@@ -1472,13 +1528,38 @@
         </div>
         <div class="faq-a-wrap"><div class="faq-a">Yes, most requests come from small and growing businesses that need ongoing tax and accounting support, not a one-off filing.</div></div>
       </div>
-      <div class="faq-item" data-i="8" onclick="toggleFaq(8)">
+      <div class="faq-item" data-i="1" onclick="toggleFaq(1)">
         <div class="faq-q">
-          <span class="faq-index">09</span>
-          <span class="faq-q-text">How do professionals or firms join?</span>
+          <span class="faq-index">02</span>
+          <span class="faq-q-text">What's the difference between getting matched with a firm and finding an individual professional?</span>
           <span class="plus">+</span>
         </div>
-        <div class="faq-a-wrap"><div class="faq-a">Individual professionals apply through the professional portal with their registration number, expertise, and experience. Accounting and advisory firms register through 'List My Firm' instead, with details for the whole practice. Both are manually reviewed before you start receiving matched requests.</div></div>
+        <div class="faq-a-wrap"><div class="faq-a">Firm matching is for engagements where specialisation, location, and capacity genuinely matter: tax investigations, forensic accounting, audits, asset tracing, restructuring and similar work. The individual professional track is a lighter option for smaller, routine work (like a single filing), and includes an optional contract-and-payment process through FinProMatch. Both are manually reviewed by our team; use whichever fits what you need.</div></div>
+      </div>
+      <div class="faq-item" data-i="3" onclick="toggleFaq(3)">
+        <div class="faq-q">
+          <span class="faq-index">04</span>
+          <span class="faq-q-text">How do I choose an individual professional?</span>
+          <span class="plus">+</span>
+        </div>
+        <div class="faq-a-wrap"><div class="faq-a">After you submit a request on the individual-professional track, we send you two to three matched professionals with their experience and specialisations. You pick the one that fits and we set up the contract. Firm matching works differently: FinProMatch's team makes the introduction rather than presenting you with a list to choose from.</div></div>
+      </div>
+      <div class="hp-faq-group">Trust and payments</div>
+      <div class="faq-item" data-i="2" onclick="toggleFaq(2)">
+        <div class="faq-q">
+          <span class="faq-index">03</span>
+          <span class="faq-q-text">How are professionals and firms verified?</span>
+          <span class="plus">+</span>
+        </div>
+        <div class="faq-a-wrap"><div class="faq-a">Our team reviews the details that professionals and firms submit, such as professional body registration (ICAN, ANAN, CITN or equivalent), experience and specialisations, before marking them verified. It's a manual review. Verification does not guarantee the outcome of any engagement.</div></div>
+      </div>
+      <div class="faq-item" data-i="4" onclick="toggleFaq(4)">
+        <div class="faq-q">
+          <span class="faq-index">05</span>
+          <span class="faq-q-text">How does payment work?</span>
+          <span class="plus">+</span>
+        </div>
+        <div class="faq-a-wrap"><div class="faq-a">For firm engagements, once you accept an introduction we set a fee and you pay FinProMatch securely through Paystack. We never see your card details. The firm's contact details unlock when payment is confirmed. We keep a service commission and pay the balance to the firm. FinProMatch is not a bank or a regulated escrow provider. See our <a href="#" onclick="openLegal('refund');return false;">Refund Policy</a>. On the individual-professional track, payment is held until the work is marked delivered, then released minus our commission.</div></div>
       </div>
       <div class="faq-item" data-i="9" onclick="toggleFaq(9)">
         <div class="faq-q">
@@ -1488,6 +1569,14 @@
         </div>
         <div class="faq-a-wrap"><div class="faq-a">Nothing is charged until our team has matched you with a firm and you've accepted the introduction. You then pay the engagement fee set for your request, securely through Paystack, and the firm's contact details unlock once payment clears. See our <a href="#" onclick="openLegal('refund');return false;">Refund Policy</a> for details.</div></div>
       </div>
+      <div class="faq-item" data-i="5" onclick="toggleFaq(5)">
+        <div class="faq-q">
+          <span class="faq-index">06</span>
+          <span class="faq-q-text">What happens if I'm unhappy with the work?</span>
+          <span class="plus">+</span>
+        </div>
+        <div class="faq-a-wrap"><div class="faq-a">Tell us at <a href="mailto:finpromatch@gmail.com">finpromatch@gmail.com</a>. We will look at what went wrong and, where it makes sense, re-match you or review the engagement. Our <a href="#" onclick="openLegal('refund');return false;">Refund Policy</a> explains when refunds apply.</div></div>
+      </div>
       <div class="faq-item" data-i="10" onclick="toggleFaq(10)">
         <div class="faq-q">
           <span class="faq-index">11</span>
@@ -1496,6 +1585,16 @@
         </div>
         <div class="faq-a-wrap"><div class="faq-a">We keep a service commission from the engagement fee you pay, and on repeat work for a period after an introduction.</div></div>
       </div>
+      <div class="hp-faq-group">Joining FinProMatch</div>
+      <div class="faq-item" data-i="8" onclick="toggleFaq(8)">
+        <div class="faq-q">
+          <span class="faq-index">09</span>
+          <span class="faq-q-text">How do professionals or firms join?</span>
+          <span class="plus">+</span>
+        </div>
+        <div class="faq-a-wrap"><div class="faq-a">Individual professionals apply through the professional portal with their registration number, expertise, and experience. Accounting and advisory firms register through 'List My Firm' instead, with details for the whole practice. Both are manually reviewed before you start receiving matched requests.</div></div>
+      </div>
+        </div>
       </div>
     </div>
   </div>
@@ -1514,38 +1613,47 @@
 
   <footer>
     <div class="container">
-      <div class="footer-top">
-        <div class="brand" style="cursor:default;">
-          <div class="brand-mark">
-            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="18" cy="24" r="13" stroke="#fff" stroke-width="3.6"/>
-              <circle cx="30" cy="24" r="13" stroke="#fff" stroke-width="3.6"/>
-              <path d="M19 24.5l4 4.2 9-10" stroke="var(--green)" stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
+      <div class="ft-grid">
+        <div class="ft-brand">
+          <div class="brand" style="cursor:default;">
+            <div class="brand-mark">
+              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="18" cy="24" r="13" stroke="#fff" stroke-width="3.6"/>
+                <circle cx="30" cy="24" r="13" stroke="#fff" stroke-width="3.6"/>
+                <path d="M19 24.5l4 4.2 9-10" stroke="var(--green)" stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div>
+              <div class="brand-name">FinPro<span style="color:var(--green);">Match</span></div>
+            </div>
           </div>
-          <div>
-            <div class="brand-name">FinPro<span style="color:var(--green);">Match</span></div>
-            <div class="brand-tagline">Verified specialists. Perfectly matched.</div>
-          </div>
+          <p class="ft-blurb">A managed marketplace matching Nigerian businesses with specialist accounting, tax, audit and forensic firms.</p>
+          <a class="ft-email" href="mailto:finpromatch@gmail.com">finpromatch@gmail.com</a>
+          <div class="social-row" id="footer-social"></div>
         </div>
-        <div style="display:flex;gap:18px;flex-wrap:wrap;">
-          <a href="#" onclick="go('firms');return false;">Find a Firm</a>
-          <a href="#" onclick="go('list-firm');return false;">List My Firm</a>
-          <a href="#" onclick="go('pro');return false;">For Professionals</a>
-          <a href="#" onclick="scrollToSection('solution');return false;">How It Works</a>
+        <nav class="ft-col" aria-label="For businesses">
+          <h4>For businesses</h4>
+          <a href="#" onclick="go('client');return false;">Get matched</a>
+          <a href="#" onclick="go('firms');return false;">Find a firm</a>
+          <a href="#" onclick="scrollToSection('solution');return false;">How it works</a>
+          <a href="#" onclick="scrollToSection('services');return false;">Services</a>
+          <a href="#" onclick="scrollToSection('faqs');return false;">FAQ</a>
+        </nav>
+        <nav class="ft-col" aria-label="For professionals">
+          <h4>For professionals</h4>
+          <a href="#" onclick="go('list-firm');return false;">List your firm</a>
+          <a href="#" onclick="go('pro');return false;">Join as a professional</a>
+        </nav>
+        <nav class="ft-col" aria-label="Company and legal">
+          <h4>Company</h4>
           <a href="#" onclick="scrollToSection('about');return false;">About</a>
           <a href="#" onclick="openLegal('contact');return false;">Contact</a>
-          <a href="#" onclick="scrollToSection('faqs');return false;">FAQ</a>
-          <a href="#" onclick="openLegal('terms');return false;">Terms</a>
-          <a href="#" onclick="openLegal('privacy');return false;">Privacy</a>
-          <a href="#" onclick="openLegal('refund');return false;">Refunds</a>
-        </div>
+          <a href="#" onclick="openLegal('terms');return false;">Terms &amp; Conditions</a>
+          <a href="#" onclick="openLegal('privacy');return false;">Privacy Policy</a>
+          <a href="#" onclick="openLegal('refund');return false;">Refund Policy</a>
+        </nav>
       </div>
-      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;margin-bottom:20px;">
-        <a href="mailto:finpromatch@gmail.com" style="color:#fff;">finpromatch@gmail.com</a>
-        <div class="social-row" id="footer-social"></div>
-      </div>
-      © 2026 FinProMatch. A managed marketplace matching Nigerian businesses with the right specialist accounting, tax, audit and forensic firms.
+      <div class="ft-bottom">© 2026 FinProMatch. All rights reserved.</div>
     </div>
   </footer>
 </section>
