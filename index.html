@@ -797,6 +797,29 @@
     .hp-path{padding:26px;}
     .hp-note-card{margin-top:-18px;}
   }
+  /* hero fills the first screen on desktop */
+  @media (min-width:981px){
+    .hp-hero{min-height:calc(100svh - 91px);display:flex;align-items:center;padding-top:28px;padding-bottom:36px;box-sizing:border-box;}
+    .hp-hero-grid{width:100%;align-items:center;}
+    .hp-h1{font-size:clamp(44px,5.2vw,56px);margin-top:20px;}
+    .hp-hero .lede{font-size:19px;margin-top:22px;}
+    .hp-hero .hero-ctas{margin-top:30px;}
+    .hp-hero-note{margin-top:20px;}
+    .hp-mock{padding:26px 28px 40px;gap:18px;}
+    .hp-note-card{padding:16px 20px;margin-top:-20px;}
+    .hp-note-card p{font-size:14.5px;line-height:1.55;}
+  }
+  @media (min-width:981px) and (max-height:820px){
+    .hp-hero{padding-top:20px;padding-bottom:24px;}
+    .hp-h1{font-size:clamp(40px,4.6vw,50px);}
+    .hp-hero .lede{font-size:18px;margin-top:18px;}
+    .hp-hero .hero-ctas{margin-top:24px;}
+    .hp-hero .hero-ctas .btn{padding:14px 28px;font-size:15.5px;}
+    .hp-mock{padding:22px 24px 36px;gap:14px;}
+    .hp-mock-firm{padding:14px;}
+    .hp-mock-why ul{font-size:15px;line-height:1.55;}
+    .hp-note-card{padding:14px 18px;}
+  }
   @media (prefers-reduced-motion:reduce){
     .hp-svc,.faq-a-wrap,.eyebrow-pill,.reveal{transition:none !important;}
     .hp-svc:hover{transform:none;}
@@ -1426,7 +1449,6 @@
         <p class="hp-hero-note">Tax investigations, forensic accounting, audit, bookkeeping and more. Firm owner? <a href="#" onclick="go('list-firm');return false;">List your firm</a>.</p>
       </div>
       <div class="hp-preview" role="img" aria-label="Example of a matched firm and a message from the FinProMatch team, shown with illustrative data">
-        <div class="hp-preview-label">Example · illustrative data</div>
         <div class="hp-mock">
           <div class="hp-mock-top">
             <div><div class="hp-mock-kicker">Your request</div><div class="hp-mock-title">Tax investigation</div></div>
