@@ -617,7 +617,7 @@
   }
   @media (max-width:720px){
     .hp-h1{font-size:34px;}
-    .hp-hero{padding-top:96px;padding-bottom:40px;}
+    .hp-hero{padding-top:34px;padding-bottom:40px;}
     .hp-trust-list,.hp-paths,.hp-steps,.hp-why{grid-template-columns:1fr;}
     .hp-path{padding:24px;}
     .hp-hero .hero-ctas .btn{width:100%;}
@@ -697,7 +697,7 @@
   }
   @media (max-width:720px){
     .hp-h1{font-size:36px;}
-    .hp-hero{padding-top:96px;padding-bottom:48px;}
+    .hp-hero{padding-top:34px;padding-bottom:36px;}
     .hp-hero .lede{font-size:18px;}
     .hp-hero .hero-ctas .btn{padding:16px 24px;}
     .hp-head h2,.hp-faq-side h2{font-size:30px;}
@@ -819,6 +819,16 @@
     .hp-mock-firm{padding:14px;}
     .hp-mock-why ul{font-size:15px;line-height:1.55;}
     .hp-note-card{padding:14px 18px;}
+  }
+  /* closed mobile drawer must not bleed a shadow onto the page edge */
+  .nav-drawer:not(.open){box-shadow:none;visibility:hidden;transition:transform .38s cubic-bezier(.16,1,.3,1),visibility 0s .38s;}
+  .nav-drawer.open{visibility:visible;}
+  @media (max-width:720px){
+    .hp-hero .eyebrow-pill{font-size:11px;letter-spacing:.06em;margin-bottom:0;}
+    .hp-h1{font-size:34px;margin-top:16px;}
+    .hp-hero .lede{font-size:17px;line-height:1.55;margin-top:16px;}
+    .hp-hero .hero-ctas{margin-top:22px;gap:10px;flex-direction:column;}
+    .hp-hero .hero-ctas .btn{padding:14px 24px;font-size:15.5px;}
   }
   @media (prefers-reduced-motion:reduce){
     .hp-svc,.faq-a-wrap,.eyebrow-pill,.reveal{transition:none !important;}
