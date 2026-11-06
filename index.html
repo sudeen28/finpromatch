@@ -322,7 +322,7 @@
     transition:color .15s ease, border-color .15s ease;
   }
   .qb-tab:hover{color:var(--ink);}
-  .qb-tab.active{color:var(--green);border-bottom-color:var(--green);}
+  .qb-tab.active{color:#0B7A54;border-bottom-color:var(--green);}
   .qb-panel label:first-of-type{margin-top:16px;}
 
   .btn{
@@ -707,6 +707,99 @@
     .hp-faq .faq-item{padding:18px 18px;}
     .hp-faq .faq-q{font-size:16.5px;}
     .ft-grid{grid-template-columns:1fr;}
+  }
+  /* ---------- homepage premium pass ---------- */
+  .skip-link{position:absolute;left:12px;top:-60px;background:#fff;color:var(--ink);padding:10px 16px;border-radius:8px;font-weight:700;z-index:1000;box-shadow:0 4px 14px rgba(0,0,0,.2);}
+  .skip-link:focus{top:12px;}
+  a:focus-visible,button:focus-visible,[role="button"]:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid #0B7A54;outline-offset:3px;}
+  .hp-final :focus-visible,footer :focus-visible{outline-color:#fff;}
+  #view-home{--cream:#FBFAF7;--cream-deep:#F3F1EB;--line-strong:#DAD8D0;background:#FBFAF7;}
+  #view-home .btn-orange,.hp-mock-btn,.navlinks .nav-cta{background:#0B7A54;}
+  #view-home .btn-orange:hover,.navlinks .nav-cta:hover{background:#096646;}
+  .hp-hero .eyebrow-pill{color:#0B7A54;}
+  .hp-hero-grid{align-items:start;}
+  .hp-h1{font-size:56px;font-weight:800;letter-spacing:-.025em;line-height:1.06;}
+  .band{padding:80px 0;}
+  .hp-head{margin-bottom:44px;}
+  .hp-head h2{font-size:40px;letter-spacing:-.02em;font-weight:800;}
+  .hp-ico{display:inline-flex;width:44px;height:44px;border-radius:10px;align-items:center;justify-content:center;background:var(--ink);color:#fff;flex:none;}
+  /* hero preview */
+  .hp-mock{border-radius:14px;padding:28px;}
+  body.on-home{background:#FBFAF7;}
+  .hp-mock{padding-bottom:44px;}
+  .hp-note-card{position:relative;z-index:1;margin:-22px 0 0 -36px;width:82%;background:var(--ink);color:#fff;border-radius:14px;padding:20px 22px;box-shadow:0 24px 50px -24px rgba(7,20,38,.6);pointer-events:none;user-select:none;}
+  .hp-note-head{display:flex;gap:12px;align-items:center;margin-bottom:10px;}
+  .hp-note-head strong{display:block;font-size:15px;}
+  .hp-note-head span:not(.hp-note-avatar){font-size:12.5px;color:rgba(255,255,255,.7);}
+  .hp-note-avatar{width:34px;height:34px;border-radius:8px;background:#0B7A54;display:flex;align-items:center;justify-content:center;font-weight:800;}
+  .hp-note-card p{margin:0;font-size:15px;line-height:1.6;color:rgba(255,255,255,.9);}
+  /* trust */
+  .hp-trust{background:#fff;border-top:1px solid var(--line-strong);border-bottom:1px solid var(--line-strong);padding:56px 0 40px;}
+  .hp-trust-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;}
+  .hp-trust-item h3{font-size:19px;margin:18px 0 8px;font-weight:800;}
+  .hp-trust-item p{margin:0;font-size:15.5px;line-height:1.65;color:var(--hp-text);}
+  .hp-trust-foot{margin:32px 0 0;font-size:15px;font-weight:600;}
+  .hp-trust-foot a{color:#0B7A54;}
+  /* audience */
+  .hp-paths{gap:24px;}
+  .hp-path{border-radius:12px;padding:36px;gap:14px;}
+  .hp-path h3{font-size:24px;margin-top:8px;}
+  .hp-path p{flex:0;font-size:16.5px;}
+  .hp-ticks{list-style:none;margin:6px 0 10px;padding:0;display:flex;flex-direction:column;gap:12px;flex:1;}
+  .hp-ticks li{display:flex;gap:12px;align-items:flex-start;font-size:15.5px;line-height:1.5;color:var(--hp-text);}
+  .hp-ticks svg{color:#0B7A54;flex:none;margin-top:2px;}
+  /* stepper */
+  .hp-stepper{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:36px;}
+  .hp-stepper li{position:relative;padding-top:64px;}
+  .hp-node{position:absolute;top:0;left:0;width:44px;height:44px;border-radius:50%;background:var(--ink);color:#fff;font-weight:800;font-size:17px;display:flex;align-items:center;justify-content:center;z-index:1;}
+  .hp-stepper li:not(:last-child)::before{content:'';position:absolute;top:21px;left:56px;right:-24px;height:2px;background:#0B7A54;opacity:.45;}
+  .hp-stepper h3{font-size:19px;margin:0 0 8px;font-weight:800;}
+  .hp-stepper p{margin:0;font-size:15.5px;line-height:1.65;color:var(--hp-text);}
+  /* services */
+  .hp-svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+  .hp-svc{display:flex;flex-direction:column;gap:10px;background:#fff;border:1px solid var(--line-strong);border-radius:12px;padding:28px;text-decoration:none;color:inherit;transition:border-color .15s,box-shadow .15s,transform .15s;}
+  .hp-svc:hover{border-color:var(--ink);box-shadow:0 14px 30px -18px rgba(7,20,38,.35);transform:translateY(-2px);}
+  .hp-svc h3{font-size:19px;margin:10px 0 0;font-weight:800;}
+  .hp-svc p{margin:0;font-size:15.5px;line-height:1.6;color:var(--hp-text);flex:1;}
+  .hp-more{font-size:14.5px;font-weight:700;color:#0B7A54;margin-top:6px;}
+  .hp-svc:hover .hp-more{text-decoration:underline;}
+  /* differentiators */
+  .hp-split{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:72px;align-items:start;}
+  .hp-split-intro{position:sticky;top:110px;}
+  .hp-split-intro h2{font-size:38px;line-height:1.15;letter-spacing:-.02em;margin:14px 0 18px;text-align:left;font-weight:800;}
+  .hp-split-intro p{font-size:17px;line-height:1.7;color:var(--hp-text);margin:0;}
+  .hp-dl{margin:0;display:flex;flex-direction:column;}
+  .hp-dl > div{padding:26px 0;border-top:1px solid var(--line-strong);}
+  .hp-dl > div:last-child{border-bottom:1px solid var(--line-strong);}
+  .hp-dl dt{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:19px;margin-bottom:6px;}
+  .hp-dl dd{margin:0;font-size:16px;line-height:1.65;color:var(--hp-text);}
+  /* faq a11y */
+  .faq-a-wrap{visibility:hidden;transition:max-height .4s cubic-bezier(.4,0,.2,1),visibility 0s .4s;}
+  .faq-item.open .faq-a-wrap{visibility:visible;transition-delay:0s;}
+  .hp-faq .faq-a a{color:#0B7A54;}
+  .hp-faq .faq-q{cursor:pointer;}
+  @media (max-width:980px){
+    .hp-trust-grid{grid-template-columns:1fr;gap:28px;}
+    .hp-stepper{grid-template-columns:1fr;gap:0;}
+    .hp-stepper li{padding:0 0 32px 64px;min-height:44px;}
+    .hp-stepper li:not(:last-child)::before{top:52px;left:21px;right:auto;width:2px;height:calc(100% - 52px);}
+    .hp-svc-grid{grid-template-columns:repeat(2,1fr);}
+    .hp-split{grid-template-columns:1fr;gap:32px;}
+    .hp-split-intro{position:static;}
+    .hp-note-card{margin-left:0;width:100%;}
+  }
+  @media (max-width:720px){
+    .band{padding:56px 0;}
+    .hp-h1{font-size:36px;}
+    .hp-head{margin-bottom:32px;}
+    .hp-head h2,.hp-split-intro h2{font-size:30px;}
+    .hp-svc-grid{grid-template-columns:1fr;}
+    .hp-path{padding:26px;}
+    .hp-note-card{margin-top:-18px;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .hp-svc,.faq-a-wrap,.eyebrow-pill,.reveal{transition:none !important;}
+    .hp-svc:hover{transform:none;}
   }
   /* ---------- client portal shell ---------- */
   body.portal-mode .navlinks .nav-link,body.portal-mode .navlinks .nav-burger{display:none !important;}
@@ -1251,7 +1344,8 @@
 }
 </script>
 </head>
-<body>
+<body class="on-home">
+<a class="skip-link" href="#" onclick="var v=document.querySelector('.view.active');v.setAttribute('tabindex','-1');v.focus();return false;">Skip to main content</a>
 
 <div id="app-loader" class="app-loader" aria-hidden="true">
   <div class="app-loader-mark">
@@ -1331,7 +1425,7 @@
         </div>
         <p class="hp-hero-note">Tax investigations, forensic accounting, audit, bookkeeping and more. Firm owner? <a href="#" onclick="go('list-firm');return false;">List your firm</a>.</p>
       </div>
-      <div class="hp-preview" role="img" aria-label="Example of a matched firm shown in the FinProMatch client dashboard, using illustrative data">
+      <div class="hp-preview" role="img" aria-label="Example of a matched firm and a message from the FinProMatch team, shown with illustrative data">
         <div class="hp-preview-label">Example · illustrative data</div>
         <div class="hp-mock">
           <div class="hp-mock-top">
@@ -1351,40 +1445,59 @@
             </ul>
           </div>
           <div class="hp-mock-actions"><span class="hp-mock-btn">Accept introduction</span><span class="hp-mock-btn ghost">Message our team</span></div>
-          <div class="hp-mock-foot">Step 3 of 5 · Your reply</div>
+        </div>
+        <div class="hp-note-card">
+          <div class="hp-note-head"><span class="hp-note-avatar">F</span><div><strong>FinProMatch team</strong><span>Message</span></div></div>
+          <p>We've read your request and matched you with a firm that handles tax investigations in Lagos. Review the details and let us know if you'd like to go ahead.</p>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="hp-trust">
+  <div class="hp-trust" id="trust">
     <div class="container">
-      <ul class="hp-trust-list">
-        <li><strong>A person reads every request.</strong><span>Matches are made by our team, not by software.</span></li>
-        <li><strong>Firms submit their credentials.</strong><span>We review registration details and experience before marking a firm verified.</span></li>
-        <li><strong>Lagos, Abuja and Port Harcourt first.</strong><span>On-site work goes to firms nearby; remote-friendly work reaches further.</span></li>
-      </ul>
+      <div class="hp-trust-grid">
+        <div class="hp-trust-item"><span class="hp-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/></svg></span>
+          <h3>A person reads every request</h3><p>Our team reviews each request and chooses a firm by hand. Nothing is matched by software.</p></div>
+        <div class="hp-trust-item"><span class="hp-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg></span>
+          <h3>Credentials are reviewed</h3><p>Firms and professionals submit registration details and experience. We review them before marking anyone verified.</p></div>
+        <div class="hp-trust-item"><span class="hp-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span>
+          <h3>You decide before you pay</h3><p>You see the firm and our reasoning first. Nothing is charged until you accept the introduction.</p></div>
+      </div>
+      <p class="hp-trust-foot"><a href="#" onclick="scrollToSection('faqs');return false;">What "verified" means →</a></p>
     </div>
   </div>
 
   <div class="band" id="paths">
     <div class="container">
-      <div class="hp-head"><span class="eyebrow-pill reveal">Choose your path</span><h2>Where do you fit?</h2></div>
+      <div class="hp-head"><span class="eyebrow-pill reveal">Who it's for</span><h2>Two ways in</h2></div>
       <div class="hp-paths">
         <div class="hp-path">
-          <h3>I need financial expertise</h3>
-          <p>Describe the work, your industry and location. We introduce you to a firm suited to it, and you track everything from one dashboard.</p>
+          <span class="hp-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01M12 6h.01M16 6h.01M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01"/></svg></span>
+          <h3>For businesses</h3>
+          <p>Describe the problem once and we find the right firm for it.</p>
+          <ul class="hp-ticks">
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>One brief, reviewed by a person</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>See why a firm was chosen before you commit</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Track status, messages and payments in one place</span></li>
+          </ul>
           <div class="hp-path-actions">
             <button class="btn btn-orange" onclick="go('client')">Find a specialist →</button>
             <button class="subtle-btn" onclick="go('firms')">Browse firms</button>
           </div>
         </div>
         <div class="hp-path" id="for-professionals">
-          <h3>I'm a professional or a firm</h3>
-          <p>Apply once. After we review your credentials, relevant client requests come to you, so you are not chasing leads on a public listing.</p>
+          <span class="hp-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span>
+          <h3>For firms and professionals</h3>
+          <p>Apply once and receive requests that suit your practice.</p>
+          <ul class="hp-ticks">
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Submit your credentials for review</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Set your specialisations and capacity</span></li>
+            <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Receive introductions that fit, not a public lead list</span></li>
+          </ul>
           <div class="hp-path-actions">
-            <button class="btn btn-primary" onclick="go('list-firm')">List my firm</button>
-            <button class="btn hp-btn-line" onclick="go('pro')">Join as an individual professional</button>
+            <button class="btn btn-primary" onclick="go('list-firm')">List your firm</button>
+            <button class="btn hp-btn-line" onclick="go('pro')">Join as a professional</button>
           </div>
         </div>
       </div>
@@ -1393,52 +1506,45 @@
 
   <div class="band hp-band-soft" id="solution">
     <div class="container">
-      <div class="hp-head"><span class="eyebrow-pill reveal">How it works</span><h2>From request to introduction in four steps</h2>
+      <div class="hp-head"><span class="eyebrow-pill reveal">How it works</span><h2>From request to introduction</h2>
         <p class="band-sub">We aim to reply within 2 business days. Timing varies with how complex the request is.</p></div>
-      <ol class="hp-steps">
-        <li><span class="hp-step-n">1</span><h4>Tell us what you need</h4><p>Describe the work, your industry, location and how sensitive it is.</p></li>
-        <li><span class="hp-step-n">2</span><h4>A person reviews it</h4><p>Our team reads every request and chooses a suitable firm by hand.</p></li>
-        <li><span class="hp-step-n">3</span><h4>Accept the introduction</h4><p>See the firm and why we chose it. Accept if you're happy to go ahead.</p></li>
-        <li><span class="hp-step-n">4</span><h4>Pay and get started</h4><p>Pay the fee set for your engagement through Paystack. The firm's contact details then unlock.</p></li>
+      <ol class="hp-stepper">
+        <li><span class="hp-node">1</span><h3>Tell us what you need</h3><p>Describe the work, your industry, location and how sensitive it is.</p></li>
+        <li><span class="hp-node">2</span><h3>A person reviews it</h3><p>Our team reads the request and chooses a suitable firm.</p></li>
+        <li><span class="hp-node">3</span><h3>Accept the introduction</h3><p>See the firm and why we chose it. Accept if you want to proceed.</p></li>
+        <li><span class="hp-node">4</span><h3>Pay and get started</h3><p>Pay the fee set for your engagement through Paystack. The firm's contact details then unlock.</p></li>
       </ol>
     </div>
   </div>
 
   <div class="band" id="services">
     <div class="container">
-      <div class="hp-head"><span class="eyebrow-pill reveal">Services</span><h2>Different problems need different specialists</h2>
-        <p class="band-sub">Pick the closest match, or just tell us the problem and we'll point you to the right kind of firm.</p></div>
-      <div class="hp-services">
-        <div class="hp-service-group">
-          <h3>Everyday accounting</h3>
-          <a href="/bookkeeping-services-lagos"><strong>Bookkeeping</strong><span>Monthly records, reconciliations and reporting</span></a>
-          <a href="/audit-firms-lagos"><strong>Audit</strong><span>Statutory audit firms with the right capacity</span></a>
-        </div>
-        <div class="hp-service-group">
-          <h3>Tax</h3>
-          <a href="/tax-investigation-firms-nigeria"><strong>Tax investigations and audits</strong><span>Support when you are facing a FIRS review or dispute</span></a>
-        </div>
-        <div class="hp-service-group">
-          <h3>Investigations and disputes</h3>
-          <a href="/forensic-accounting-nigeria"><strong>Forensic accounting</strong><span>Investigating suspected fraud</span></a>
-          <a href="/asset-tracing-nigeria"><strong>Asset tracing</strong><span>Financial investigation and tracing services</span></a>
-          <a href="/litigation-support-nigeria"><strong>Litigation support</strong><span>Expert support for financial disputes</span></a>
-        </div>
+      <div class="hp-head"><span class="eyebrow-pill reveal">Services</span><h2>Specialists for specific problems</h2>
+        <p class="band-sub">Pick the closest match, or tell us the problem and we'll point you to the right kind of firm.</p></div>
+      <div class="hp-svc-grid">
+        <a class="hp-svc" href="/bookkeeping-services-lagos"><span class="hp-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span><h3>Bookkeeping</h3><p>Monthly records, reconciliations and management reporting.</p><span class="hp-more">Learn more →</span></a>
+        <a class="hp-svc" href="/audit-firms-lagos"><span class="hp-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/><polyline points="9 14 11 16 15 12"/></svg></span><h3>Audit</h3><p>Statutory and internal audit support from firms with the right capacity.</p><span class="hp-more">Learn more →</span></a>
+        <a class="hp-svc" href="/tax-investigation-firms-nigeria"><span class="hp-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg></span><h3>Tax investigations</h3><p>Support when you face a tax audit, review or dispute.</p><span class="hp-more">Learn more →</span></a>
+        <a class="hp-svc" href="/forensic-accounting-nigeria"><span class="hp-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span><h3>Forensic accounting</h3><p>Investigating suspected fraud and financial irregularities.</p><span class="hp-more">Learn more →</span></a>
+        <a class="hp-svc" href="/asset-tracing-nigeria"><span class="hp-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span><h3>Asset tracing</h3><p>Locating and documenting assets in disputes and recoveries.</p><span class="hp-more">Learn more →</span></a>
+        <a class="hp-svc" href="/litigation-support-nigeria"><span class="hp-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18"/><path d="M5 7h14"/><path d="M5 7l-3 7a3 3 0 0 0 6 0z"/><path d="M19 7l-3 7a3 3 0 0 0 6 0z"/></svg></span><h3>Litigation support</h3><p>Expert financial analysis and reporting for legal proceedings.</p><span class="hp-more">Learn more →</span></a>
       </div>
-      <div class="hp-center"><button class="btn btn-orange" onclick="go('client')">Tell us what you need →</button></div>
     </div>
   </div>
 
   <div class="band hp-band-soft" id="about">
-    <div class="container">
-      <div class="hp-head"><span class="eyebrow-pill reveal">Why FinProMatch</span><h2>Built around the match, not a directory</h2>
-        <p class="band-sub">FinProMatch connects Nigerian businesses with accounting, tax, forensic, audit and advisory firms across Lagos, Abuja and Port Harcourt.</p></div>
-      <div class="hp-why">
-        <div><h4>One structured brief</h4><p>You describe the work once. Our team sees the specialisation, location and sensitivity, not just a category.</p></div>
-        <div><h4>A person makes the match</h4><p>There is no algorithm or match score. The reason we chose a firm is written by the team and shown to you.</p></div>
-        <div><h4>Local when it matters</h4><p>Investigations and audits that need someone on site go to nearby firms. Remote-friendly work is open to firms further afield.</p></div>
-        <div><h4>Everything in one place</h4><p>Track your request, message our team and see payment status from your dashboard.</p></div>
+    <div class="container hp-split">
+      <div class="hp-split-intro">
+        <span class="eyebrow-pill reveal">Why a managed marketplace</span>
+        <h2>We stay involved from request to introduction</h2>
+        <p>FinProMatch connects Nigerian businesses with accounting, tax, forensic, audit and advisory firms across Lagos, Abuja and Port Harcourt. Instead of a directory you search alone, a person guides each request.</p>
       </div>
+      <dl class="hp-dl">
+        <div><dt>One structured brief</dt><dd>The team sees the specialisation, location and sensitivity of your work, not just a category.</dd></div>
+        <div><dt>The reasoning is written down</dt><dd>You get a plain-language reason for each match, so you can judge it yourself.</dd></div>
+        <div><dt>Location is part of the match</dt><dd>Work that needs someone on site goes to nearby firms. Remote-friendly work is open to firms further afield.</dd></div>
+        <div><dt>One place to follow up</dt><dd>Track your request, message our team and see payment status from your dashboard.</dd></div>
+      </dl>
     </div>
   </div>
 
@@ -1882,6 +1988,20 @@ function initSteps(){
 }
 
 /* FAQ */
+function initFaqA11y(){
+  document.querySelectorAll('.faq-item').forEach(it => {
+    const q = it.querySelector('.faq-q'), w = it.querySelector('.faq-a-wrap');
+    if(!q || !w) return;
+    const id = 'faq-a-' + it.dataset.i;
+    w.id = id; w.setAttribute('role', 'region');
+    q.setAttribute('role', 'button'); q.tabIndex = 0;
+    q.setAttribute('aria-expanded', 'false'); q.setAttribute('aria-controls', id);
+    q.addEventListener('keydown', e => {
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); e.stopPropagation(); toggleFaq(it.dataset.i); }
+    });
+    it.querySelectorAll('a').forEach(a => a.addEventListener('click', e => e.stopPropagation()));
+  });
+}
 function toggleFaq(i){
   const item = document.querySelector(`.faq-item[data-i="${i}"]`);
   if(!item) return;
@@ -1889,14 +2009,17 @@ function toggleFaq(i){
   const isOpen = item.classList.contains('open');
   // close any other open items
   document.querySelectorAll('.faq-item.open').forEach(o => {
-    if(o !== item){ o.classList.remove('open'); o.querySelector('.faq-a-wrap').style.maxHeight = '0px'; }
+    if(o !== item){ o.classList.remove('open'); o.querySelector('.faq-a-wrap').style.maxHeight = '0px'; const oq = o.querySelector('.faq-q'); if(oq) oq.setAttribute('aria-expanded', 'false'); }
   });
+  const qEl = item.querySelector('.faq-q');
   if(isOpen){
     item.classList.remove('open');
     wrap.style.maxHeight = '0px';
+    if(qEl) qEl.setAttribute('aria-expanded', 'false');
   } else {
     item.classList.add('open');
     wrap.style.maxHeight = wrap.scrollHeight + 'px';
+    if(qEl) qEl.setAttribute('aria-expanded', 'true');
   }
 }
 
@@ -2002,6 +2125,7 @@ document.addEventListener('DOMContentLoaded', () => {
   loadSessionFromStorage();
   handlePaymentCallback();
   initSocialIcons();
+  initFaqA11y();
   refreshNotificationBell();
   initGoogleAuth();
   initRotatingWord();
@@ -2910,6 +3034,7 @@ function go(view){
   if(view === 'notifications') renderNotifications();
   if(view === 'legal') renderLegal();
   syncPortalMode();
+  document.body.classList.toggle('on-home', view === 'home');
   refreshNotificationBell();
 }
 
