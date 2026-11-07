@@ -898,6 +898,14 @@
   div.session-bar .section-label,div.session-bar .eyebrow,div.session-bar > :first-child:not(.who):not(button){color:rgba(255,255,255,.75);}
   .portal-main .firm-sidebar-card{padding:16px 18px;}
   .portal-main .biz-grid{gap:12px;}
+  /* admin shell */
+  .portal-nav button .portal-count{margin-left:auto;font-style:normal;font-size:11.5px;font-weight:700;background:var(--cream-deep);color:var(--ink);border-radius:999px;padding:1px 8px;}
+  .portal-nav button.active .portal-count{background:rgba(255,255,255,.2);color:#fff;}
+  @media(max-width:760px){
+    .portal-nav{overflow-x:auto;}
+    .portal-nav button{min-width:64px;position:relative;}
+    .portal-nav button .portal-count{position:absolute;top:2px;right:6px;margin:0;font-size:10px;padding:0 5px;}
+  }
   @media (prefers-reduced-motion:reduce){
     .hp-svc,.faq-a-wrap,.eyebrow-pill,.reveal{transition:none !important;}
     .hp-svc:hover{transform:none;}
@@ -1930,24 +1938,27 @@
 <!-- ADMIN -->
 <section class="view" id="view-admin">
   <div class="container app-section">
-    <div id="admin-gate" class="auth-screen">
-      <div class="section-label">Team dashboard</div>
-      <h2 class="section-title" id="admin-title">Team access</h2>
-      <div class="card">
-        <label>Email</label>
-        <input id="admin-email" type="email" placeholder="you@taxbridge.ng" onkeydown="if(event.key==='Enter')adminLogin()">
-        <label>Password</label>
+    <div id="admin-gate" class="client-hero-grid">
+      <div class="client-trust-panel">
+        <div class="eyebrow">Team dashboard</div>
+        <h2>Match, verify and keep every engagement moving.</h2>
+        <div class="trust-step"><span class="trust-step-num">01</span><span class="trust-step-text">Review new requests and choose the right firm by hand.</span></div>
+        <div class="trust-step"><span class="trust-step-num">02</span><span class="trust-step-text">Verify firms and professionals before they show as verified.</span></div>
+        <div class="trust-step"><span class="trust-step-num">03</span><span class="trust-step-text">Confirm completion and record payouts.</span></div>
+      </div>
+      <div class="client-form-panel">
+        <h2 class="auth-card-title" id="admin-title">Team access</h2>
+        <div class="card">
+          <label>Email</label>
+          <input id="admin-email" type="email" placeholder="you@taxbridge.ng" onkeydown="if(event.key==='Enter')adminLogin()">
+          <label>Password</label>
         <div class="pw-wrap"><input id="admin-pass" type="password" placeholder="Enter password" onkeydown="if(event.key==='Enter')adminLogin()"><button type="button" class="pw-toggle" onclick="togglePasswordVisibility('admin-pass',this)" tabindex="-1" aria-label="Show password"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
         <div style="margin-top:18px;"><button class="btn btn-primary" onclick="adminLogin()">Sign in</button></div>
         <div id="admin-gate-msg"></div>
+        </div>
       </div>
     </div>
     <div id="admin-panel" style="display:none;">
-      <div class="session-bar">
-        <div class="section-label" style="margin:0;">Team dashboard</div>
-        <button class="subtle-btn" onclick="adminLogout()">Log out</button>
-      </div>
-      <h2 class="section-title" id="admin-title-2">Leads, applications & engagements</h2>
       <div id="admin-content"></div>
     </div>
   </div>
@@ -3806,7 +3817,8 @@ async function renderClientDashboard(){
 /** Hides the public marketing nav while a client is inside their private workspace. */
 function syncPortalMode(){
   const active = document.querySelector('.view.active');
-  const on = !!(active && ((active.id === 'view-client' && session.client) || (active.id === 'view-list-firm' && session.firm)));
+  const adminShown = !!(adminSession && document.getElementById('admin-panel') && document.getElementById('admin-panel').style.display !== 'none');
+  const on = !!(active && ((active.id === 'view-client' && session.client) || (active.id === 'view-list-firm' && session.firm) || (active.id === 'view-admin' && adminShown)));
   document.body.classList.toggle('portal-mode', on);
 }
 
@@ -5507,6 +5519,7 @@ async function renderFirmProfile(){
 function showAdminPanel(){
   document.getElementById('admin-gate').style.display = 'none';
   document.getElementById('admin-panel').style.display = 'block';
+  syncPortalMode();
 }
 function hideAdminPanel(){
   document.getElementById('admin-gate').style.display = '';
@@ -5530,6 +5543,7 @@ function adminLogout(){
   adminSession = null;
   saveSessionToStorage();
   hideAdminPanel();
+  syncPortalMode();
 }
 
 let adminTab = 'overview';
@@ -5642,17 +5656,29 @@ async function renderAdmin(){
     attnRow(newBriefCount, 'New quick briefs', 'Homepage enquiries with no account yet', `adminGoTo('briefs')`)
   ].join('');
 
-  const tabBtn = (id, label, count) => `<button id="admin-tabbtn-${id}" class="${adminTab===id?'active':''}" onclick="setAdminTab('${id}')">${label}${count === undefined ? '' : ` <span class="hint">(${count})</span>`}</button>`;
-  let html = `
-    <div class="dash-tabs" style="margin-bottom:22px;">
-      ${tabBtn('overview', 'Overview')}
-      ${tabBtn('engagements', 'Engagement Requests', engagements.length)}
-      ${tabBtn('firms', 'Firms', firms.length)}
-      ${tabBtn('pros', 'Professionals', pros.length)}
-      ${tabBtn('clients', 'Clients', clients ? clients.length : undefined)}
-      ${tabBtn('leads', 'Individual Requests', activeLeadCount)}
-      ${tabBtn('briefs', 'Quick Briefs', newBriefCount)}
-    </div>`;
+  const adminIcons = {
+    overview: PORTAL_ICONS.overview, engagements: PORTAL_ICONS.requests, firms: '<path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/>',
+    pros: PORTAL_ICONS.profile, clients: '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+    leads: PORTAL_ICONS.payments, briefs: PORTAL_ICONS.messages
+  };
+  const tabBtn = (id, label, count) => `<button id="admin-tabbtn-${id}" class="${adminTab===id?'active':''}" onclick="setAdminTab('${id}')">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${adminIcons[id]}</svg><span>${label}</span>${count ? `<em class="portal-count">${count}</em>` : ''}</button>`;
+  let html = `<div class="portal">
+    <aside class="portal-side" aria-label="Admin navigation">
+      <div class="portal-who"><div class="portal-avatar">${esc(((adminSession.admin && adminSession.admin.name) || 'A').trim().charAt(0).toUpperCase())}</div>
+        <div><div class="portal-who-name">${esc((adminSession.admin && adminSession.admin.name) || 'Team')}</div><div class="hint portal-who-mail">Team dashboard</div></div></div>
+      <nav class="portal-nav">
+        ${tabBtn('overview', 'Overview', (attnHtml ? (reviewingCount + pendingFirmCount + pendingProCount + newBriefCount) : 0))}
+        ${tabBtn('engagements', 'Engagements', engagements.length)}
+        ${tabBtn('firms', 'Firms', firms.length)}
+        ${tabBtn('pros', 'Professionals', pros.length)}
+        ${tabBtn('clients', 'Clients', clients ? clients.length : 0)}
+        ${tabBtn('leads', 'Individual', activeLeadCount)}
+        ${tabBtn('briefs', 'Quick briefs', newBriefCount)}
+      </nav>
+      <button class="portal-logout" onclick="adminLogout()">Log out</button>
+    </aside>
+    <main class="portal-main">`;
 
   html += `<div id="admin-tab-overview" style="display:${adminTab==='overview'?'block':'none'};">
     <div class="admin-stats-grid">
@@ -5873,7 +5899,9 @@ async function renderAdmin(){
   }
   html += `</div>`;
 
+  html += `</main></div>`;
   content.innerHTML = html;
+  syncPortalMode();
 }
 
 async function setGuestBriefStatus(id, status){
