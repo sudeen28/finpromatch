@@ -895,6 +895,9 @@
   @keyframes ldSlide{0%{transform:translateX(-100%);}100%{transform:translateX(300%);}}
   .app-loader.nav-mode{transition:opacity .25s ease,visibility .25s ease;}
   .app-loader.nav-mode .app-loader-mark{width:84px;height:84px;border-radius:22px;}
+  div.session-bar .section-label,div.session-bar .eyebrow,div.session-bar > :first-child:not(.who):not(button){color:rgba(255,255,255,.75);}
+  .portal-main .firm-sidebar-card{padding:16px 18px;}
+  .portal-main .biz-grid{gap:12px;}
   @media (prefers-reduced-motion:reduce){
     .hp-svc,.faq-a-wrap,.eyebrow-pill,.reveal{transition:none !important;}
     .hp-svc:hover{transform:none;}
@@ -2744,7 +2747,8 @@ const api = {
     accept: (token, id, firmId) => apiFetch(`/engagements/${encodeURIComponent(id)}/accept`, {method:'POST', token, body: firmId ? {firmId} : undefined}),
     firmAccept: (token, id) => apiFetch(`/engagements/${encodeURIComponent(id)}/firm-accept`, {method:'POST', token}),
     payInit: (token, id) => apiFetch(`/engagements/${encodeURIComponent(id)}/pay/init`, {method:'POST', token}),
-    payVerify: (token, id) => apiFetch(`/engagements/${encodeURIComponent(id)}/pay/verify`, {token})
+    payVerify: (token, id) => apiFetch(`/engagements/${encodeURIComponent(id)}/pay/verify`, {token}),
+    deliver: (token, id) => apiFetch(`/engagements/${encodeURIComponent(id)}/deliver`, {method:'POST', token})
   },
   leads: {
     create: (token, body) => apiFetch('/leads', { method: 'POST', token, body }),
@@ -2772,15 +2776,22 @@ const api = {
     professionals: {
       list: (token) => apiFetch('/admin/professionals', { token }),
       verify: (token, id, verified) => apiFetch(`/admin/professionals/${id}/verify`, { method: 'PATCH', token, body: { verified } }),
+      remove: (token, id) => apiFetch(`/admin/professionals/${id}`, { method: 'DELETE', token }),
     },
     firms: {
       list: (token) => apiFetch('/admin/firms', { token }),
       setVerificationStatus: (token, id, status) => apiFetch(`/admin/firms/${id}/verification-status`, { method: 'PATCH', token, body: { status } }),
       setVerificationLevel: (token, id, level, value) => apiFetch(`/admin/firms/${id}/verification-levels`, { method: 'PATCH', token, body: { level, value } }),
+      remove: (token, id) => apiFetch(`/admin/firms/${id}`, { method: 'DELETE', token }),
       toggleVerifiedSpecialisation: (token, id, specialisation) => apiFetch(`/admin/firms/${id}/verified-specialisations`, { method: 'PATCH', token, body: { specialisation } }),
+    },
+    clients: {
+      list: (token) => apiFetch('/admin/clients', { token }),
+      remove: (token, id) => apiFetch(`/admin/clients/${id}`, { method: 'DELETE', token }),
     },
     engagements: {
       list: (token) => apiFetch('/admin/engagements', { token }),
+      complete: (token, id) => apiFetch(`/admin/engagements/${id}/complete`, { method: 'POST', token }),
       setStatus: (token, id, status) => apiFetch(`/admin/engagements/${id}/status`, { method: 'PATCH', token, body: { status } }),
       match: (token, id, firmIds, reason) => apiFetch(`/admin/engagements/${id}/match`, { method: 'PATCH', token, body: { firmIds, reason } }),
       setFee: (token, id, feeAmount) => apiFetch(`/admin/engagements/${id}/fee`, { method: 'PATCH', token, body: { feeAmount } }),
@@ -3471,6 +3482,7 @@ function deriveEngState(eng){
   }
   else if(hasFirm && !accepted){ label = 'Firm matched: your reply needed'; tone = 'action'; next = { text: 'Review the matched firm below, then accept the introduction if you are happy to proceed.', cta: 'accept' }; }
   else if(accepted && paid && status !== 'active'){ label = 'Paid · contact details unlocked'; tone = 'success'; next = { text: "Payment received. Contact the firm directly using the details shown, and message us here if you need help." }; }
+  else if(eng.deliveredAt){ label = 'Work delivered'; tone = 'success'; next = { text: 'Your firm has marked the work as delivered. FinProMatch is confirming completion. Message us here if anything is not right.' }; }
   else if(status === 'active'){ label = 'Work in progress'; tone = 'success'; next = { text: 'Work is under way with your firm. Message us here if you need help.' }; }
   else if(accepted && eng.paymentStatus === 'pending'){ label = 'Payment not completed'; tone = 'action'; next = { text: `Your ${fmt(fee)} payment hasn't gone through yet. You can try again.`, cta: 'pay' }; }
   else if(accepted && fee){ label = 'Awaiting your payment'; tone = 'action'; next = { text: `Pay ${fmt(fee)} to FinProMatch to unlock the firm's contact details.`, cta: 'pay' }; }
@@ -3483,7 +3495,8 @@ function deriveEngState(eng){
     { label: 'Firm matched', done: hasFirm && status !== 'rematch' },
     { label: 'Introduction accepted', done: accepted },
     { label: 'Payment', done: paid },
-    { label: 'Work in progress', done: status === 'active' || status === 'completed' },
+    { label: 'Work in progress', done: status === 'active' || !!eng.deliveredAt || status === 'completed' },
+    { label: 'Delivered', done: !!eng.deliveredAt || status === 'completed' },
     { label: 'Completed', done: status === 'completed' }
   ];
   let currentSet = false;
@@ -3793,7 +3806,7 @@ async function renderClientDashboard(){
 /** Hides the public marketing nav while a client is inside their private workspace. */
 function syncPortalMode(){
   const active = document.querySelector('.view.active');
-  const on = !!(active && active.id === 'view-client' && session.client);
+  const on = !!(active && ((active.id === 'view-client' && session.client) || (active.id === 'view-list-firm' && session.firm)));
   document.body.classList.toggle('portal-mode', on);
 }
 
@@ -4909,7 +4922,7 @@ async function firmLogin(){
     msg.innerHTML = `<div class="msg error">${esc(err.message)}</div>`;
   }
 }
-function firmLogout(){ session.firm = null; saveSessionToStorage(); renderFirmPortal(); }
+function firmLogout(){ session.firm = null; saveSessionToStorage(); firmDashTab = "overview"; renderFirmPortal(); syncPortalMode(); }
 
 function verifyBadgeHtml(status){
   const v = VERIFICATION_STATUSES[status] || VERIFICATION_STATUSES.pending;
@@ -4932,42 +4945,54 @@ function publicVerifyBadgeHtml(status){
 let firmDashTab = 'overview';
 function setFirmDashTab(tab){ firmDashTab = tab; renderFirmDashboard(); }
 
+const FIRM_NAV = [
+  { id: 'overview', label: 'Overview', icon: 'overview', tabs: ['overview'] },
+  { id: 'engagements', label: 'Engagements', icon: 'requests', tabs: ['engagements'] },
+  { id: 'profile', label: 'Firm profile', icon: 'profile', tabs: ['profile','capacity','credentials','verification'] },
+  { id: 'settings', label: 'Settings', icon: 'settings', tabs: ['settings'] }
+];
+PORTAL_ICONS.settings = '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>';
+const FIRM_PAGE_TITLES = { overview:'Overview', engagements:'Engagements', profile:'Firm profile', capacity:'Capacity & availability', credentials:'Credentials', verification:'Verification', settings:'Settings' };
+
 async function renderFirmDashboard(){
   const area = document.getElementById('firm-dash-area');
   if(!session.firm){ renderFirmPortal(); return; }
   const firm = session.firm.user;
+  syncPortalMode();
 
-  const tabs = [
-    {id:'overview', label:'Overview'},
-    {id:'profile', label:'Firm Profile'},
-    {id:'capacity', label:'Capacity & Availability'},
-    {id:'credentials', label:'Credentials'},
-    {id:'engagements', label:'Leads & Engagements'},
-    {id:'verification', label:'Verification'},
-    {id:'settings', label:'Settings'}
-  ];
+  let body = '';
+  if(firmDashTab === 'overview') body = await firmDashOverviewHtml(firm);
+  else if(firmDashTab === 'profile') body = firmDashProfileHtml(firm);
+  else if(firmDashTab === 'capacity') body = firmDashCapacityHtml(firm);
+  else if(firmDashTab === 'credentials') body = firmDashCredentialsHtml(firm);
+  else if(firmDashTab === 'engagements') body = await firmDashEngagementsHtml(firm);
+  else if(firmDashTab === 'verification') body = firmDashVerificationHtml(firm);
+  else if(firmDashTab === 'settings') body = firmDashSettingsHtml(firm);
 
-  area.innerHTML = `
-    <div class="session-bar">
-      <div class="who">Signed in as <strong>${esc(firm.firmName)}</strong> · ${esc(firm.email)}</div>
-      <button class="subtle-btn" onclick="firmLogout()">Log out</button>
-    </div>
-    <div class="section-label">Firm dashboard</div>
-    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:18px;">
-      <h2 class="section-title" style="margin-bottom:0;">${esc(firm.firmName)}</h2>
-      ${verifyBadgeHtml(firm.verificationStatus)}
-    </div>
-    <div class="dash-tabs">${tabs.map(t => `<button class="${firmDashTab===t.id?'active':''}" onclick="setFirmDashTab('${t.id}')">${t.label}</button>`).join('')}</div>
-    <div id="firm-dash-tab-content"></div>`;
+  const group = FIRM_NAV.find(n => n.tabs.includes(firmDashTab)) || FIRM_NAV[0];
+  const navHtml = FIRM_NAV.map(n => {
+    const active = n.id === group.id;
+    return `<button class="${active ? 'active' : ''}" onclick="setFirmDashTab('${n.tabs[0]}')" ${active ? 'aria-current="page"' : ''}>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${PORTAL_ICONS[n.icon]}</svg><span>${n.label}</span></button>`;
+  }).join('');
+  const subTabs = group.tabs.length > 1 ? `<div class="dash-tabs">${group.tabs.map(t => `<button class="${firmDashTab===t?'active':''}" onclick="setFirmDashTab('${t}')">${FIRM_PAGE_TITLES[t]}</button>`).join('')}</div>` : '';
 
-  const content = document.getElementById('firm-dash-tab-content');
-  if(firmDashTab === 'overview') content.innerHTML = await firmDashOverviewHtml(firm);
-  if(firmDashTab === 'profile') { content.innerHTML = firmDashProfileHtml(firm); renderFirmEditChips(firm); }
-  if(firmDashTab === 'capacity') content.innerHTML = firmDashCapacityHtml(firm);
-  if(firmDashTab === 'credentials') content.innerHTML = firmDashCredentialsHtml(firm);
-  if(firmDashTab === 'engagements') content.innerHTML = await firmDashEngagementsHtml(firm);
-  if(firmDashTab === 'verification') content.innerHTML = firmDashVerificationHtml(firm);
-  if(firmDashTab === 'settings') content.innerHTML = firmDashSettingsHtml(firm);
+  area.innerHTML = `<div class="portal">
+    <aside class="portal-side" aria-label="Firm navigation">
+      <div class="portal-who"><div class="portal-avatar">${esc((firm.firmName || '?').trim().charAt(0).toUpperCase())}</div>
+        <div><div class="portal-who-name">${esc(firm.firmName)}</div><div class="hint portal-who-mail">${esc(firm.email)}</div></div></div>
+      <nav class="portal-nav">${navHtml}</nav>
+      <button class="portal-logout" onclick="firmLogout()">Log out</button>
+    </aside>
+    <main class="portal-main">
+      <div class="pt-head"><div><h2 class="pt-title">${esc(group.id === 'overview' ? 'Welcome, ' + firm.firmName : group.label)}</h2>
+        <p class="hint">${group.id === 'overview' ? 'Here is what needs your attention.' : ''}</p></div>
+        <div>${verifyBadgeHtml(firm.verificationStatus)}</div></div>
+      ${subTabs}
+      <div id="firm-dash-tab-content">${body}</div>
+    </main>
+  </div>`;
+  if(firmDashTab === 'profile') renderFirmEditChips(firm);
 }
 
 async function firmDashOverviewHtml(firm){
@@ -4983,6 +5008,7 @@ async function firmDashOverviewHtml(firm){
   const awaitingFirmAccept = matchedToMe.filter(e => e.status === 'client_accepted');
 
   return `
+    ${awaitingFirmAccept.length ? `<div class="pt-next action"><div><strong>${awaitingFirmAccept.length} engagement${awaitingFirmAccept.length>1?'s are':' is'} waiting for you to accept.</strong><div class="hint">The client has already accepted the introduction.</div></div><button class="btn btn-brass btn-sm" onclick="setFirmDashTab('engagements')">Review</button></div>` : ''}
     <div class="biz-grid" style="margin-top:0;">
       <div class="firm-sidebar-card"><h4>Active engagements</h4><p style="font-size:22px;font-weight:800;font-family:'Plus Jakarta Sans',sans-serif;">${active.length}</p></div>
       <div class="firm-sidebar-card"><h4>Awaiting your acceptance</h4><p style="font-size:22px;font-weight:800;font-family:'Plus Jakarta Sans',sans-serif;">${awaitingFirmAccept.length}</p></div>
@@ -5159,6 +5185,8 @@ async function firmDashEngagementsHtml(firm){
         ${eng.matchReasonNote ? `<div class="scope-note"><strong>Why FinProMatch matched you:</strong> ${esc(eng.matchReasonNote)}</div>` : ''}
         ${eng.contactVisible ? `<p style="font-size:14px;margin-top:10px;"><strong>Client contact:</strong> ${esc(eng.clientName)}, ${esc(eng.clientEmail)}${eng.clientPhone ? ' · ' + esc(eng.clientPhone) : ''}</p>` : `<p class="hint">Client contact details appear once they accept the introduction.</p>`}
         ${eng.status === 'client_accepted' ? `<button class="btn btn-brass btn-sm" style="margin-top:10px;" onclick="firmAcceptEngagement('${eng.id}')">Accept this engagement</button>` : ''}
+        ${['paid','released'].includes(eng.paymentStatus) && eng.status !== 'completed' && !eng.deliveredAt ? `<button class="btn btn-brass btn-sm" style="margin-top:10px;" onclick="firmMarkDelivered('${eng.id}')">Mark work delivered</button><p class="hint" style="margin-top:6px;">Press this when the work is done. FinProMatch and the client are notified, and our team confirms completion.</p>` : ''}
+        ${eng.deliveredAt && eng.status !== 'completed' ? `<div class="msg success" style="margin-top:10px;">Marked delivered. Waiting for FinProMatch to confirm completion.</div>` : ''}
         ${eng.contactVisible ? await renderMessageThreadHtml(eng.id, 'firm') : ''}
       </div>`;
     }
@@ -5172,6 +5200,13 @@ async function firmDashEngagementsHtml(firm){
     </div>`).join('') : '<div class="empty">None right now.</div>';
 
   return html;
+}
+async function firmMarkDelivered(engId){
+  if(!confirm('Mark this work as delivered? The client and FinProMatch will be notified.')) return;
+  try{
+    await api.engagements.deliver(session.firm.token, engId);
+    renderFirmDashboard();
+  } catch(err){ alert(err.message); }
 }
 async function firmAcceptEngagement(engId){
   try{
@@ -5498,7 +5533,7 @@ function adminLogout(){
 }
 
 let adminTab = 'overview';
-const ADMIN_TABS = ['overview','engagements','firms','pros','leads','briefs'];
+const ADMIN_TABS = ['overview','engagements','firms','pros','clients','leads','briefs'];
 // Switching tabs just shows/hides panels that are already on the page —
 // no re-fetch, so it's instant and any half-typed fee or message survives.
 function setAdminTab(tab){
@@ -5541,11 +5576,29 @@ function applyAdminEngFilters(){
    match modal) don't need a fresh network round-trip on every keystroke. */
 let adminCache = { engagements: [], firms: [], pros: [], leads: [], guestBriefs: [] };
 
+async function confirmEngagementComplete(id){
+  if(!confirm('Confirm this engagement as completed? The client and firm will be emailed.')) return;
+  try{ await api.admin.engagements.complete(adminSession.token, id); renderAdmin(); }
+  catch(err){ alert(err.message); }
+}
+async function adminDeleteAccount(kind, id, name){
+  const label = { client:'client', firm:'firm', pro:'professional' }[kind];
+  const extra = kind === 'client' ? ' This also deletes all of their requests, messages and payments history.' : '';
+  if(!confirm(`Permanently delete the ${label} "${name}"?${extra} This cannot be undone.`)) return;
+  try{
+    const t = adminSession.token;
+    if(kind === 'client') await api.admin.clients.remove(t, id);
+    else if(kind === 'firm') await api.admin.firms.remove(t, id);
+    else await api.admin.professionals.remove(t, id);
+    renderAdmin();
+  } catch(err){ alert(err.message); }
+}
+
 async function renderAdmin(){
   const content = document.getElementById('admin-content');
   content.innerHTML = '<div class="loading">Loading dashboard…</div>';
 
-  let stats, engagements, firms, pros, leads, guestBriefs;
+  let stats, engagements, firms, pros, leads, guestBriefs, clients = [];
   try{
     const token = adminSession.token;
     [stats, engagements, firms, pros, leads, guestBriefs] = await Promise.all([
@@ -5556,6 +5609,7 @@ async function renderAdmin(){
       api.admin.leads.list(token).then(d => d.leads),
       api.admin.guestBriefs.list(token).then(d => d.briefs)
     ]);
+    try{ clients = (await api.admin.clients.list(token)).clients; } catch(e){ clients = null; }
   } catch(err){
     content.innerHTML = `<div class="msg error">${esc(err.message)}</div>`;
     return;
@@ -5581,6 +5635,7 @@ async function renderAdmin(){
     </div>` : '';
   const attnHtml = [
     attnRow(reviewingCount, 'Engagement requests awaiting a match', 'Pick a firm and send the introduction', `adminGoTo('engagements','reviewing')`),
+    attnRow(engagements.filter(e => e.deliveredAt && e.status !== 'completed').length, 'Work delivered: confirm completion', 'The firm says the work is done; confirm to close it out', `adminGoTo('engagements','matched')`),
     attnRow(paidAwaitingRelease.length, 'Paid — fee ready to release', 'Client has paid; release once the work is underway', `adminGoTo('engagements','matched')`),
     attnRow(pendingFirmCount, 'Firms waiting for verification', 'Review credentials and verify or request info', `adminGoTo('firms')`),
     attnRow(pendingProCount, 'Professionals waiting for verification', 'Individual accountants awaiting review', `adminGoTo('pros')`),
@@ -5594,6 +5649,7 @@ async function renderAdmin(){
       ${tabBtn('engagements', 'Engagement Requests', engagements.length)}
       ${tabBtn('firms', 'Firms', firms.length)}
       ${tabBtn('pros', 'Professionals', pros.length)}
+      ${tabBtn('clients', 'Clients', clients ? clients.length : undefined)}
       ${tabBtn('leads', 'Individual Requests', activeLeadCount)}
       ${tabBtn('briefs', 'Quick Briefs', newBriefCount)}
     </div>`;
@@ -5664,6 +5720,7 @@ async function renderAdmin(){
           ${f.verificationStatus !== 'info_required' ? `<button class="subtle-btn" onclick="setFirmVerification('${f.id}','info_required')">Need info</button>` : ''}
           ${f.verificationStatus !== 'rejected' ? `<button class="subtle-btn" onclick="setFirmVerification('${f.id}','rejected')">Reject</button>` : ''}
           <button class="subtle-btn" onclick="toggleAdminVerifyPanel('${f.id}')">Verification details</button>
+          <button class="subtle-btn" style="color:#B0442E;" onclick="adminDeleteAccount('firm','${f.id}','${esc(f.firmName).replace(/'/g,'')}')">Delete</button>
         </td>
       </tr>
       <tr id="admin-verify-row-${f.id}" style="display:none;">
@@ -5692,8 +5749,24 @@ async function renderAdmin(){
         <td>${esc(p.expertise)}</td>
         <td>${rating ? `${rating.avg.toFixed(1)}★ (${rating.count})` : 'No ratings yet'}</td>
         <td>${p.verified ? '<span class="stamp">Verified</span>' : '<span class="stamp pending">Pending</span>'}</td>
-        <td>${p.verified ? '' : `<button class="subtle-btn" onclick="verifyPro('${p.id}')">Verify</button>`}</td>
+        <td>${p.verified ? '' : `<button class="subtle-btn" onclick="verifyPro('${p.id}')">Verify</button>`} <button class="subtle-btn" style="color:#B0442E;" onclick="adminDeleteAccount('pro','${p.id}','${esc(p.name).replace(/'/g,'')}')">Delete</button></td>
       </tr>`;
+    }
+    html += `</tbody></table></div>`;
+  }
+  html += `</div>`;
+
+  html += `<div id="admin-tab-clients" style="display:${adminTab==='clients'?'block':'none'};">`;
+  html += `<h3 style="font-size:19px;margin:0 0 4px;">Client accounts <span class="hint">(${clients ? clients.length : 0})</span></h3>`;
+  if(clients === null){
+    html += `<div class="msg error">Couldn't load clients. The backend update (SETUP.md) hasn't been deployed yet.</div>`;
+  } else if(!clients.length){
+    html += `<div class="empty">No client accounts yet.</div>`;
+  } else {
+    html += `<div class="table-scroll"><table class="ledger-table"><thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Requests</th><th>Joined</th><th></th></tr></thead><tbody>`;
+    for(const c of clients){
+      html += `<tr><td>${esc(c.name)}</td><td class="mono">${esc(c.email)}</td><td>${esc(c.phone)||'N/A'}</td><td>${c.engagementCount||0}</td><td>${new Date(c.createdAt).toLocaleDateString()}</td>
+        <td><button class="subtle-btn" style="color:#B0442E;" onclick="adminDeleteAccount('client','${c.id}','${esc(c.name).replace(/'/g,'')}')">Delete</button></td></tr>`;
     }
     html += `</tbody></table></div>`;
   }
@@ -5888,6 +5961,12 @@ async function renderAdminEngagementCard(eng, allFirms){
     }
   }
 
+  if(eng.deliveredAt && eng.status !== 'completed'){
+    paymentHtml = `<div class="msg success" style="margin-top:14px;"><strong>The firm marked the work delivered</strong> on ${new Date(eng.deliveredAt).toLocaleDateString()}.
+      <div style="margin-top:8px;"><button class="btn btn-brass btn-sm" onclick="confirmEngagementComplete('${eng.id}')">Confirm completion</button></div></div>` + paymentHtml;
+  } else if(eng.status === 'active' && eng.paymentStatus && ['paid','released'].includes(eng.paymentStatus) && eng.status !== 'completed'){
+    paymentHtml += `<div style="margin-top:10px;"><button class="btn btn-outline btn-sm" onclick="confirmEngagementComplete('${eng.id}')">Mark as completed (firm has not pressed delivered)</button></div>`;
+  }
   const adminStage = (ENGAGEMENT_STATUSES[eng.status] || {}).stage || '';
   const adminDomId = 'admin-eng-' + eng.id;
   // Closed by default so the list scans like an inbox; click a row to open it.

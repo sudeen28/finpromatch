@@ -200,7 +200,7 @@ model Firm {
 model Engagement {
   id      String @id @default(uuid())
   refCode String @unique
-
+  deliveredAt DateTime?
   client      User   @relation(fields: [clientId], references: [id])
   clientId    String
   clientName  String

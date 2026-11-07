@@ -6,6 +6,13 @@ const cookieParser = require('cookie-parser');
 const { attachAuth } = require('./middleware/auth');
 const { errorHandler } = require('./middleware/errorHandler');
 
+app.use('/api', require('./middleware/notifyHooks'));
+app.use('/api', require('./routes/engagementWork'));
+app.use('/api/admin', require('./routes/adminAccounts'));
+
+
+
+
 const clientAuthRoutes = require('./routes/auth.client');
 const proAuthRoutes = require('./routes/auth.pro');
 const firmAuthRoutes = require('./routes/auth.firm');
