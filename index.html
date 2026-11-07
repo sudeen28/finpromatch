@@ -876,6 +876,25 @@
   .hp-final{background:linear-gradient(165deg,var(--blue) 0%,var(--indigo) 55%,var(--deep) 100%);}
   footer{background:var(--deep);}
   .hp-ico{background:linear-gradient(135deg,var(--indigo),var(--blue));}
+  /* ===== Same palette on portals ===== */
+  .client-hero-grid{max-width:1000px;border:none;box-shadow:0 24px 60px -24px rgba(19,12,51,.45);}
+  .client-hero-grid .client-trust-panel{background:radial-gradient(500px 300px at 90% 0%,rgba(74,222,155,.16),transparent 60%),linear-gradient(165deg,var(--deep) 0%,var(--indigo) 50%,var(--blue) 100%);}
+  .client-trust-panel .eyebrow{color:var(--mint);}
+  .client-form-panel .auth-card-title{margin-top:0;}
+  .client-form-panel .card .auth-card-title{margin-top:0;}
+  div.session-bar{background:linear-gradient(135deg,var(--deep),var(--indigo) 55%,var(--blue));color:#fff;border:none;}
+  div.session-bar .who{color:rgba(255,255,255,.88);}
+  div.session-bar .who strong{color:#fff;}
+  div.session-bar .subtle-btn{color:#fff;border-color:rgba(255,255,255,.4);background:transparent;}
+  div.session-bar .subtle-btn:hover{background:rgba(255,255,255,.12);border-color:#fff;}
+  /* loading screen: same palette as the site; used for page changes and slow button actions */
+  .app-loader{background:linear-gradient(165deg,var(--deep,#130c33) 0%,var(--indigo,#14154a) 55%,var(--blue,#0c2a5e) 100%);flex-direction:column;gap:22px;}
+  .app-loader-mark{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);}
+  .app-loader-bar{width:120px;height:3px;border-radius:3px;background:rgba(255,255,255,.18);overflow:hidden;}
+  .app-loader-bar::after{content:"";display:block;height:100%;width:40%;border-radius:3px;background:#4ADE9B;animation:ldSlide 1s ease-in-out infinite;}
+  @keyframes ldSlide{0%{transform:translateX(-100%);}100%{transform:translateX(300%);}}
+  .app-loader.nav-mode{transition:opacity .25s ease,visibility .25s ease;}
+  .app-loader.nav-mode .app-loader-mark{width:84px;height:84px;border-radius:22px;}
   @media (prefers-reduced-motion:reduce){
     .hp-svc,.faq-a-wrap,.eyebrow-pill,.reveal{transition:none !important;}
     .hp-svc:hover{transform:none;}
@@ -1434,6 +1453,7 @@
       <path d="M19 24.5l4 4.2 9-10" stroke="var(--green)" stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
   </div>
+  <div class="app-loader-bar"></div>
 </div>
 
 <nav class="topnav">
@@ -2221,6 +2241,13 @@ document.addEventListener('DOMContentLoaded', () => {
   initCardGlow();
   initStatsCountUp();
   if(window.location.hash === '#admin'){ go('admin'); }
+  else {
+    // deep links from the service pages: /#client, /#firms, /#list-firm, /#pro, /#services …
+    const h = (window.location.hash || '').slice(1);
+    const views = {client:'client', firms:'firms', 'list-firm':'list-firm', pro:'pro'};
+    if(views[h]) go(views[h]);
+    else if(h && document.getElementById(h)) setTimeout(() => scrollToSection(h), 600);
+  }
 });
 
 // Hidden admin entry point — no visible link anywhere in the UI (by design).
@@ -2236,6 +2263,8 @@ document.addEventListener('keydown', (e) => {
 const LOADER_MIN_MS = 2000;
 const loaderStartedAt = Date.now();
 function hideAppLoader(){
+  window.__bootDone = true;
+  if(navLoading) return;
   const loader = document.getElementById('app-loader');
   if(loader) loader.classList.add('hidden');
 }
@@ -2605,7 +2634,38 @@ const GOOGLE_CLIENT_ID = window.FINPROMATCH_GOOGLE_CLIENT_ID || window.TAXBRIDGE
 
 class ApiError extends Error {}
 
-async function apiFetch(path, { method = 'GET', body, token } = {}){
+/* ---------- page loading screen ---------- */
+let apiPending = 0, navLoading = false, loaderShownAt = 0, loaderFailsafe = null;
+function showPageLoader(){
+  const el = document.getElementById('app-loader');
+  if(!el || !window.__bootDone) return;
+  navLoading = true; loaderShownAt = Date.now();
+  el.classList.add('nav-mode'); el.classList.remove('hidden');
+  clearTimeout(loaderFailsafe);
+  loaderFailsafe = setTimeout(() => { apiPending = 0; hidePageLoader(0); }, 8000);
+}
+function hidePageLoader(minMs = 450){
+  const wait = Math.max(0, minMs - (Date.now() - loaderShownAt));
+  setTimeout(() => {
+    if(apiPending > 0 && loaderFailsafe) return;     // an API call is still running; its finish will call us again
+    const el = document.getElementById('app-loader');
+    if(el) el.classList.add('hidden');
+    navLoading = false; clearTimeout(loaderFailsafe); loaderFailsafe = null;
+  }, wait);
+}
+async function apiFetch(path, opts = {}){
+  apiPending++;
+  const isWrite = (opts.method || 'GET') !== 'GET';
+  const t = isWrite ? setTimeout(showPageLoader, 300) : null;   // slow button actions get the loading screen too
+  try{ return await apiFetchRaw(path, opts); }
+  finally{
+    apiPending = Math.max(0, apiPending - 1);
+    if(t) clearTimeout(t);
+    if(navLoading && apiPending === 0) hidePageLoader(isWrite ? 0 : 450);
+  }
+}
+
+async function apiFetchRaw(path, { method = 'GET', body, token } = {}){
   const headers = { 'Content-Type': 'application/json' };
   if(token) headers.Authorization = 'Bearer ' + token;
   let res, data;
@@ -3096,6 +3156,7 @@ function renderLegal(){
 let legalReturn = 'home';
 let firmProfileReturn = 'firms';   // where "Back" on a firm profile should go
 function go(view){
+  showPageLoader();
   const prevActive = document.querySelector('.view.active');
   const prevView = prevActive ? prevActive.id.replace('view-', '') : 'home';
   if(view === 'firm-profile' && prevView !== 'firm-profile') firmProfileReturn = prevView;
@@ -3118,6 +3179,7 @@ function go(view){
   syncPortalMode();
   document.body.classList.toggle('on-home', view === 'home');
   refreshNotificationBell();
+  hidePageLoader(450);
 }
 
 function statusTag(status){
@@ -4463,15 +4525,17 @@ function renderProPortal(){
   if(!session.pro){
     dashArea.innerHTML = '';
     authArea.innerHTML = `
-      <div class="auth-screen">
-        <div class="section-label">Professional portal</div>
-        <h2 class="section-title">${proAuthTab === 'login' ? 'Log in' : 'Apply as a professional'}</h2>
-        <div class="card">
-          <div class="auth-tabs">
-            <button class="${proAuthTab==='login'?'active':''}" onclick="setProAuthTab('login')">Log in</button>
-            <button class="${proAuthTab==='signup'?'active':''}" onclick="setProAuthTab('signup')">Apply</button>
+      <div class="client-hero-grid">
+        <div class="client-trust-panel"><div class="eyebrow">Professional portal</div><h2>Get introduced to clients who need your expertise.</h2><div class="trust-step"><span class="trust-step-num">01</span><span class="trust-step-text">Apply with your professional body and registration number.</span></div><div class="trust-step"><span class="trust-step-num">02</span><span class="trust-step-text">Our team checks your record before anything is shown as verified.</span></div><div class="trust-step"><span class="trust-step-num">03</span><span class="trust-step-text">Matched clients are introduced to you by a person, not an algorithm.</span></div></div>
+        <div class="client-form-panel">
+          <h2 class="auth-card-title">${proAuthTab === 'login' ? 'Log in' : 'Apply as a professional'}</h2>
+          <div class="card">
+            <div class="auth-tabs">
+              <button class="${proAuthTab==='login'?'active':''}" onclick="setProAuthTab('login')">Log in</button>
+              <button class="${proAuthTab==='signup'?'active':''}" onclick="setProAuthTab('signup')">Apply</button>
+            </div>
+            <div id="pro-auth-form"></div>
           </div>
-          <div id="pro-auth-form"></div>
         </div>
       </div>`;
     renderProAuthForm();
@@ -4691,15 +4755,17 @@ function renderFirmPortal(){
   if(!session.firm){
     dashArea.innerHTML = '';
     authArea.innerHTML = `
-      <div class="auth-screen" style="max-width:640px;">
-        <div class="section-label">List my firm</div>
-        <h2 class="section-title">${firmAuthTab === 'login' ? 'Log in to your firm' : 'Register your firm'}</h2>
-        <div class="card" style="max-width:600px;">
-          <div class="auth-tabs">
-            <button class="${firmAuthTab==='login'?'active':''}" onclick="setFirmAuthTab('login')">Log in</button>
-            <button class="${firmAuthTab==='signup'?'active':''}" onclick="setFirmAuthTab('signup')">Register firm</button>
+      <div class="client-hero-grid">
+        <div class="client-trust-panel"><div class="eyebrow">List my firm</div><h2>Put your firm in front of businesses that need it.</h2><div class="trust-step"><span class="trust-step-num">01</span><span class="trust-step-text">Register your firm and its specialisations.</span></div><div class="trust-step"><span class="trust-step-num">02</span><span class="trust-step-text">Our team reviews your details; nothing shows as Verified until then.</span></div><div class="trust-step"><span class="trust-step-num">03</span><span class="trust-step-text">We introduce you to matched clients and you agree the work directly.</span></div></div>
+        <div class="client-form-panel">
+          <h2 class="auth-card-title">${firmAuthTab === 'login' ? 'Log in to your firm' : 'Register your firm'}</h2>
+          <div class="card">
+            <div class="auth-tabs">
+              <button class="${firmAuthTab==='login'?'active':''}" onclick="setFirmAuthTab('login')">Log in</button>
+              <button class="${firmAuthTab==='signup'?'active':''}" onclick="setFirmAuthTab('signup')">Register firm</button>
+            </div>
+            <div id="firm-auth-form"></div>
           </div>
-          <div id="firm-auth-form"></div>
         </div>
       </div>`;
     renderFirmAuthForm();
